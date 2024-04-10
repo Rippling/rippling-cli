@@ -12,27 +12,35 @@ from rippling_cli.constants import RIPPLING_BASE_URL, RIPPLING_API
 
 
 class OAuthToken:
-    _instance = None
+    class OAuthTokenRequestHandler(http.server.BaseHTTPRequestHandler):
+        def __init__(self, *args, **kwargs):
+            self.token = kwargs.pop('token')
+            super().__init__(*args, **kwargs)
 
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            return cls._instance
-        else:
-            return cls._instance
+        def do_GET(self):
+            self.send_response(200)
+            self.send_header("Content-type", "text/html")
+            self.end_headers()
+            self.wfile.write(b"Authorization successful. You can close this window.")
+            parsed_path = self.parse_path()
+            self.token.authorization_code = parse_qs(parsed_path.query).get("code")
+            self.token.authorization_code_received.set()
+            self.token.stop_server()
+
+        def parse_path(self):
+            import urllib.parse
+            return urllib.parse.urlparse(self.path)
 
     def __init__(self, client_id=None, code_challenge=None, code_challenge_method=None):
-        if not hasattr(self, 'initialized'):
-            self.client_id = client_id
-            self.code_challenge = code_challenge
-            self.code_challenge_method = code_challenge_method
-            self.authorization_code = None
-            self.initialized = True
-            self.server_thread = None
-            self.authorization_code_received = threading.Event()
-            self.authorization_code_timeout = 300  # seconds
-            self.expires_in = 3600
-            self.httpd = None
+        self.client_id = client_id
+        self.code_challenge = code_challenge
+        self.code_challenge_method = code_challenge_method
+        self.authorization_code = None
+        self.server_thread = None
+        self.authorization_code_received = threading.Event()
+        self.authorization_code_timeout = 300  # seconds
+        self.expires_in = 3600
+        self.httpd = None
 
     def start_authorization_flow(self):
         if not self.client_id or not self.code_challenge or not self.code_challenge_method:
@@ -50,7 +58,9 @@ class OAuthToken:
             raise TimeoutError("Authorization code not received within the timeout period.")
 
     def run_server(self):
-        with socketserver.TCPServer(("localhost", 2000), OAuthTokenRequestHandler) as httpd:
+        with socketserver.TCPServer(("localhost", 2000),
+                                    lambda *args, **kwargs: self.OAuthTokenRequestHandler(*args, **kwargs,
+                                                                                          token=self)) as httpd:
             self.httpd = httpd
             self.httpd.serve_forever()
 
@@ -87,20 +97,3 @@ class OAuthToken:
         # Compare with the current time
         current_timestamp = datetime.now().timestamp()
         return current_timestamp > expiration_timestamp
-
-
-class OAuthTokenRequestHandler(http.server.BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
-        self.wfile.write(b"Authorization successful. You can close this window.")
-        parsed_path = self.parse_path()
-        token = OAuthToken()
-        token.authorization_code = parse_qs(parsed_path.query).get("code")
-        token.authorization_code_received.set()
-        token.stop_server()
-
-    def parse_path(self):
-        import urllib.parse
-        return urllib.parse.urlparse(self.path)
