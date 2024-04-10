@@ -16,3 +16,8 @@ class PKCE:
             return code_challenge
         else:
             raise ValueError("Unsupported code challenge method")
+
+    @staticmethod
+    def generate_pkce_pair(code_verifier_length=43):
+        code_verifier, code_challenge = pkce.generate_pkce_pair(code_verifier_length)
+        return code_verifier, code_challenge

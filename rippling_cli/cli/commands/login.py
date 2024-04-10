@@ -3,7 +3,7 @@ from pathlib import Path
 import click
 
 from rippling_cli.config.config import save_oauth_token
-from rippling_cli.constants import CODE_CHALLENGE_METHOD
+from rippling_cli.constants import CODE_CHALLENGE_METHOD, DEFAULT_CODE_VERIFIER_LENGTH
 from rippling_cli.core.oauth_client import OAuthClient
 from rippling_cli.core.oauth_pkce import PKCE
 from rippling_cli.core.oauth_token import OAuthToken
@@ -17,11 +17,12 @@ def login(ctx) -> None:
     """
     client_id, client_secret = ctx.obj.oauth_credentials
     if client_id and client_secret:
-        if not ctx.obj.oauth_token:
+        if ctx.obj.oauth_token:
+            click.echo("Already logged in")
+        else:
             client_id, client_secret = OAuthClient.get_client_credentials()
 
-            code_verifier = PKCE.generate_code_verifier()
-            code_challenge = PKCE.get_code_challenge(code_verifier)
+            code_verifier, code_challenge = PKCE.generate_pkce_pair(DEFAULT_CODE_VERIFIER_LENGTH)
 
             token = OAuthToken(client_id, code_challenge, CODE_CHALLENGE_METHOD)
             token.start_authorization_flow()
