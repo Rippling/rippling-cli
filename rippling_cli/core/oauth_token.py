@@ -30,7 +30,7 @@ class OAuthToken:
             self.initialized = True
             self.server_thread = None
             self.authorization_code_received = threading.Event()
-            self.authorization_code_timeout = 60  # seconds
+            self.authorization_code_timeout = 300  # seconds
             self.expires_in = 3600
             self.httpd = None
 
