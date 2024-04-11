@@ -1,7 +1,7 @@
-from rippling_cli.config.config import get_oauth_credentials
+from rippling_cli.config.config import get_client_id
 
 
 class OAuthClient:
     @classmethod
     def get_client_credentials(cls):
-        return get_oauth_credentials()
+        return get_client_id()

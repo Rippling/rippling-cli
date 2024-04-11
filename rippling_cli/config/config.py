@@ -7,13 +7,12 @@ from pathlib import Path
 
 from rippling_cli.constants import OAUTH_TOKEN_FILE_NAME, RIPPLING_DIRECTORY_NAME
 
-CLIENT_ID = os.environ.get("CLIENT_ID", "Kj0JYvGDOpME1ovZ2B4n3af6uINli19QWNO0CHC1")
-CLIENT_SECRET = os.environ.get("CLIENT_SECRET", "4n8ahE8A2Sx4IguTXCSRAGBVo2ObGZ4Ezs70GpthWY0ARSUv7LOCq1AeZ8JFt59EmWt0qj3WL5xbbz5zjHQA1E5BNQK91U0HH1PIYG5gfszNnzOM2sre0gmEOaFZsEvp")
+CLIENT_ID = "OJ3RJIYivW34fb0N0amHBwRYY7ldjM9O00hkQdR4"
 config_dir = Path.home() / f".{RIPPLING_DIRECTORY_NAME}"
 
 
-def get_oauth_credentials():
-    return CLIENT_ID, CLIENT_SECRET
+def get_client_id():
+    return CLIENT_ID
 
 
 def get_oauth_token_data():

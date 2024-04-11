@@ -15,18 +15,16 @@ def login(ctx) -> None:
     """
     Log in to the application using OAuth
     """
-    client_id, client_secret = ctx.obj.oauth_credentials
-    if client_id and client_secret:
+    client_id = ctx.obj.oauth_credentials
+    if client_id:
         if ctx.obj.oauth_token:
             click.echo("Already logged in")
         else:
-            client_id, client_secret = OAuthClient.get_client_credentials()
-
             code_verifier, code_challenge = PKCE.generate_pkce_pair(DEFAULT_CODE_VERIFIER_LENGTH)
 
             token = OAuthToken(client_id, code_challenge, CODE_CHALLENGE_METHOD)
             token.start_authorization_flow()
-            access_token = token.exchange_for_token(client_secret, code_verifier)
+            access_token = token.exchange_for_token(code_verifier)
             ctx.obj.oauth_token = access_token
 
             save_oauth_token(access_token, token.expires_in)
