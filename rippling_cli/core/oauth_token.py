@@ -17,6 +17,9 @@ class OAuthToken:
             self.token = kwargs.pop('token')
             super().__init__(*args, **kwargs)
 
+        def log_message(self, format, *args):
+            pass  # Suppress access log messages
+
         def do_GET(self):
             self.send_response(200)
             self.send_header("Content-type", "text/html")
@@ -70,11 +73,10 @@ class OAuthToken:
             self.httpd.server_close()
             self.server_thread.join()
 
-    def exchange_for_token(self, client_secret, code_verifier):
+    def exchange_for_token(self, code_verifier):
         data = {
             "grant_type": "authorization_code",
             "client_id": self.client_id,
-            "client_secret": client_secret,
             "code": self.authorization_code,
             "code_verifier": code_verifier,
             "Content-Type": "application/json"
