@@ -11,7 +11,7 @@ CLIENT_ID = "OJ3RJIYivW34fb0N0amHBwRYY7ldjM9O00hkQdR4"
 config_dir = Path.home() / f".{RIPPLING_DIRECTORY_NAME}"
 
 
-def get_oauth_credentials():
+def get_client_id():
     return CLIENT_ID
 
 

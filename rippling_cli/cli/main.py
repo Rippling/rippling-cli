@@ -7,7 +7,7 @@ from rippling_cli.constants import EXIT_UNKNOWN_EXCEPTION
 from rippling_cli.core.oauth_token import OAuthToken
 from rippling_cli.core.rippling_context import RipplingContext
 from rippling_cli.cli.commands.login import login
-from rippling_cli.config.config import get_oauth_credentials, get_oauth_token_data
+from rippling_cli.config.config import get_client_id, get_oauth_token_data
 
 
 @click.group(context_settings=dict(help_option_names=["-h", "--help"]))
@@ -33,7 +33,7 @@ def cli(ctx):
     ctx.obj = RipplingContext()
 
     # Load the OAuth credentials from the config.py file
-    ctx.obj.oauth_credentials = get_oauth_credentials()
+    ctx.obj.oauth_credentials = get_client_id()
 
     # Load the OAuth token from the config directory
     oauth_token_dict = get_oauth_token_data()
