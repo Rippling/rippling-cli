@@ -7,7 +7,7 @@ from pathlib import Path
 
 from rippling_cli.constants import OAUTH_TOKEN_FILE_NAME, RIPPLING_DIRECTORY_NAME
 
-CLIENT_ID = "OJ3RJIYivW34fb0N0amHBwRYY7ldjM9O00hkQdR4"
+CLIENT_ID = "AgvGDwoBRb0BJAnL2CQ8dNbE6J2fgCFIchEOyr5S"
 config_dir = Path.home() / f".{RIPPLING_DIRECTORY_NAME}"
 
 
