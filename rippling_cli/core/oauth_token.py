@@ -1,14 +1,14 @@
+import http.server
+import socketserver
+import threading
+from datetime import datetime
 from urllib.parse import parse_qs
 
 import click
-import http.server
-from datetime import datetime
-import threading
-import socketserver
-import requests
+import requests  # type: ignore
 
 from rippling_cli.config.config import get_oauth_token_data
-from rippling_cli.constants import RIPPLING_BASE_URL, RIPPLING_API
+from rippling_cli.constants import RIPPLING_API, RIPPLING_BASE_URL
 
 
 class OAuthToken:
@@ -49,7 +49,8 @@ class OAuthToken:
         if not self.client_id or not self.code_challenge or not self.code_challenge_method:
             raise ValueError("Missing required parameters")
 
-        url = f"{RIPPLING_BASE_URL}/oauth?clientId={self.client_id}&codeChallenge={self.code_challenge}&codeChallengeMethod={self.code_challenge_method}"
+        url = f"{RIPPLING_BASE_URL}/oauth?clientId={self.client_id}" \
+              f"&codeChallenge={self.code_challenge}&codeChallengeMethod={self.code_challenge_method}"
         click.launch(url)
 
         self.server_thread = threading.Thread(target=self.run_server, daemon=True)
