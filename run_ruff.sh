@@ -3,7 +3,7 @@
 set -e
 
 RUFF_LINT="${RUFF_LINT:-true}"
-REQUIRED_RUFF_VERSION="0.0.286"
+REQUIRED_RUFF_VERSION="0.3.3"
 PYTHON_EXECUTABLE=${PYTHON_EXECUTABLE:-"python3"}
 
 ensure_ruff_installed() {
@@ -21,9 +21,9 @@ ensure_ruff_installed() {
 run_ruff() {
     ruff_cmd="ruff check"
     if [[ "$2" != "" ]]; then
-        ruff_cmd="$ruff_cmd $2 $1"
+        ruff_cmd="$ruff_cmd $2 $1  --config ruff.toml"
     else
-        ruff_cmd="$ruff_cmd $1"
+        ruff_cmd="$ruff_cmd $1  --config ruff.toml"
     fi
     # shellcheck disable=SC2086
     "${PYTHON_EXECUTABLE}" -m $ruff_cmd
