@@ -1,13 +1,13 @@
+import sys
 from typing import Union
 
 import click
-import sys
 
+from rippling_cli.cli.commands.login import login
+from rippling_cli.config.config import get_client_id, get_oauth_token_data
 from rippling_cli.constants import EXIT_UNKNOWN_EXCEPTION
 from rippling_cli.core.oauth_token import OAuthToken
 from rippling_cli.core.rippling_context import RipplingContext
-from rippling_cli.cli.commands.login import login
-from rippling_cli.config.config import get_client_id, get_oauth_token_data
 
 
 @click.group(context_settings=dict(help_option_names=["-h", "--help"]))
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     try:
         initialize_cli()
         cli()
-    except Exception as e:
+    except Exception:
         exit_code = EXIT_UNKNOWN_EXCEPTION
     finally:
         sys.exit(exit_code)

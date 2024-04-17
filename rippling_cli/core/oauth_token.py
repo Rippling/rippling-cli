@@ -1,14 +1,14 @@
+import http.server
+import socketserver
+import threading
+from datetime import datetime
 from urllib.parse import parse_qs
 
 import click
-import http.server
-from datetime import datetime
-import threading
-import socketserver
 import requests
 
 from rippling_cli.config.config import get_oauth_token_data
-from rippling_cli.constants import RIPPLING_BASE_URL, RIPPLING_API
+from rippling_cli.constants import RIPPLING_API, RIPPLING_BASE_URL
 
 
 class OAuthToken:
