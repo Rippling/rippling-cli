@@ -1,3 +1,2 @@
 *            @Rippling/apps
-/flux-sdk/   @Rippling/flux @Rippling/apps
-/flux_sdk/   @Rippling/flux
+/rippling_cli/   @Rippling/flux
