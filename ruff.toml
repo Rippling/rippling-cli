@@ -1,0 +1,7 @@
+select = ['E', 'F', 'I']
+
+target-version = "py310"
+
+line-length = 120
+
+fixable = ["ALL"]
