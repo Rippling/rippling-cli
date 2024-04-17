@@ -25,4 +25,4 @@ jobs:
       - run: poetry install
 
       - name: mypy
-        run: poetry run mypy ./rippling_cli --ignore-missing-imports
+        run: poetry run mypy ./rippling_cli
