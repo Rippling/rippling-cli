@@ -65,7 +65,6 @@ class APIClient:
                 has_more = False if not cursor else True
                 items = data["data"]
                 page += 1
-                print(page)
                 yield items
             else:
                 response.raise_for_status()
