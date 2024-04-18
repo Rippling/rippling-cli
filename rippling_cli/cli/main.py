@@ -1,8 +1,8 @@
-import sys
 from typing import Union
 
 import click
 
+from rippling_cli.cli.commands.app import app
 from rippling_cli.cli.commands.login import login
 from rippling_cli.config.config import get_client_id, get_oauth_token_data
 from rippling_cli.constants import EXIT_UNKNOWN_EXCEPTION
@@ -41,7 +41,8 @@ def cli(ctx):
 
 
 COMMANDS_LIST: list[Union[click.Command, click.Group]] = [
-    login
+    login,
+    app
 ]
 
 
