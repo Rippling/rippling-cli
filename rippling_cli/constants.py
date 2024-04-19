@@ -1,4 +1,4 @@
-RIPPLING_DIRECTORY_NAME = "rippling_cli"
+RIPPLING_DIRECTORY_NAME = ".rippling_cli"
 OAUTH_TOKEN_FILE_NAME = "oauth_token.json"
 APP_CONFIG_FILE = "app_config.json"
 CODE_CHALLENGE_METHOD = "S256"

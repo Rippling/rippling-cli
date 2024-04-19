@@ -1,4 +1,3 @@
-import os
 
 import click
 
@@ -58,9 +57,8 @@ def set(app_id: str) -> None:
 @app.command()
 def current() -> None:
     """This command indicates the current app selected by the developer within the directory."""
-    app_config_json = get_app_config()
-    app_config = app_config_json.get(os.getcwd())
-    if not app_config:
+    app_config = get_app_config()
+    if not app_config or len(app_config.keys()) == 0:
         click.echo("No app selected.")
         return
 
