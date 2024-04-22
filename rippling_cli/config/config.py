@@ -83,7 +83,7 @@ def get_app_config():
     return {}
 
 
-def save_app_config(app_id: str, app_name: str):
+def save_app_config(app_id: str, display_name: str, app_name: str):
     """
     Save the app configuration to the specified directory.
     Args:
@@ -95,7 +95,8 @@ def save_app_config(app_id: str, app_name: str):
 
     app_config = {
         "id": app_id,
-        "displayName": app_name
+        "displayName": display_name,
+        "name": app_name,
     }
 
     config_file = config_dir / APP_CONFIG_FILE
