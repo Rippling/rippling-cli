@@ -10,7 +10,8 @@ from rippling_cli.utils.file_utils import create_directory_inside_path
 
 
 # TODO: Since run configuration cannot be transferred from import/export settings , it lies inside .idea folder in \
-#  the project directory. This should be a separate command
+#  the project directory. This should be a separate command \
+#  https://intellij-support.jetbrains.com/hc/en-us/community/posts/206600965-Export-Import-Run-Configurations
 def create_run_configurations(project_name: str):
     # Create the .idea directory if it doesn't exist
     create_directory_inside_path(os.getcwd(), ".idea")
