@@ -1,6 +1,7 @@
 import click
 
 from rippling_cli.config.config import get_app_config
+from rippling_cli.core.setup_project import setup_project
 from rippling_cli.utils.app_utils import get_starter_package_for_app
 from rippling_cli.utils.build_utils import (
     remove_existing_starter_package,
@@ -8,7 +9,6 @@ from rippling_cli.utils.build_utils import (
 )
 from rippling_cli.utils.file_utils import download_file_using_url, extract_zip_to_current_cwd
 from rippling_cli.utils.login_utils import ensure_logged_in, get_current_role_name_and_email
-from rippling_cli.utils.setup_project import setup_project
 
 
 @click.group()
