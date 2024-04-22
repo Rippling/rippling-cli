@@ -1,6 +1,7 @@
 import os
 import zipfile
 from pathlib import Path
+from typing import Optional
 
 import click
 import requests  # type: ignore
@@ -50,7 +51,7 @@ def extract_zip_to_current_cwd(filename):
     delete_zip_file(file_path)
 
 
-def download_file_using_url(url: str, app_display_name: str = None):
+def download_file_using_url(url: str, app_display_name: Optional[str] = None):
     filename = app_display_name if app_display_name else url.split("/")[-1]
     output_path = Path.cwd()
     output_file = output_path / filename
