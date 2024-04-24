@@ -4,7 +4,6 @@ import shutil
 import click
 
 
-
 def starter_package_already_extracted_on_current_directory():
     cwd = os.getcwd()
 

@@ -88,9 +88,6 @@ def setup_project(name=None, email=None):
     if name and email:
         authors = f"{name} <{email}>"  # Use provided name and email
 
-    # Get the current working directory
-    current_directory = os.getcwd()
-
     project_name = "app"  # Default project name
 
     # Create pyproject.toml file with default content
