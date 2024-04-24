@@ -4,6 +4,7 @@ import click
 from rippling_cli.config.config import get_app_config, save_app_config
 from rippling_cli.constants import RIPPLING_API
 from rippling_cli.core.api_client import APIClient
+from rippling_cli.utils.app_utils import get_app_from_id
 from rippling_cli.utils.login_utils import ensure_logged_in
 
 
@@ -38,20 +39,17 @@ def list() -> None:
 def set(app_id: str) -> None:
     """This command sets the current app within the app_config.json file located in the .rippling directory."""
     ctx: click.Context = click.get_current_context()
-    api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {ctx.obj.oauth_token}"})
+    app_json = get_app_from_id(app_id, ctx.obj.oauth_token)
 
-    endpoint = "/apps/api/apps/?large_get_query=true"
-    response = api_client.post(endpoint, data={"query": f"id={app_id}&limit=1"})
-    app_list = response.json() if response.status_code == 200 else []
-
-    if response.status_code != 200 or len(app_list) == 0:
+    if not app_json:
         click.echo(f"Invalid app id: {app_id}")
         return
 
-    app_name = app_list[0].get("displayName")
+    display_name = app_json.get("displayName")
+    app_name = app_json.get("name")
 
-    save_app_config(app_id, app_name)
-    click.echo(f"Current app set to {app_name} ({app_id})")
+    save_app_config(app_id, display_name, app_name)
+    click.echo(f"Current app set to {display_name} ({app_id})")
 
 
 @app.command()

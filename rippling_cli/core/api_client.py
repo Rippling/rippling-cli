@@ -6,15 +6,15 @@ class APIClient:
         self.base_url = base_url
         self.headers = headers or {}
 
-    def make_request(self, method, endpoint, params=None, data=None):
+    def make_request(self, method, endpoint, params=None, data=None, stream=False):
         url = f"{self.base_url.rstrip('/')}/{endpoint.lstrip('/')}"
-        response = requests.request(method, url, params=params, json=data, headers=self.headers)
+        response = requests.request(method, url, params=params, json=data, headers=self.headers, stream=stream)
         return response
 
-    def get(self, endpoint, params=None):
-        return self.make_request("GET", endpoint, params=params)
+    def get(self, endpoint, params=None, stream=False):
+        return self.make_request("GET", endpoint, params=params, stream=stream)
 
-    def post(self, endpoint, data):
+    def post(self, endpoint, data=None):
         return self.make_request("POST", endpoint, data=data)
 
     def put(self, endpoint, data):
