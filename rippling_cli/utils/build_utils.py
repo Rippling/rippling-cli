@@ -4,36 +4,25 @@ import shutil
 import click
 
 
-def get_target_directory_path():
-    # Get the current working directory
-    cwd = os.getcwd()
-
-    # Get the directory name from the cwd and replace hyphens with underscores
-    directory_name = os.path.basename(cwd).replace("-", "_")
-
-    # Construct the path for the directory we're looking for
-    return os.path.join(cwd, directory_name)
-
 
 def starter_package_already_extracted_on_current_directory():
-    target_dir_path = get_target_directory_path()
+    cwd = os.getcwd()
 
-    # Check if the directory exists
-    if os.path.exists(target_dir_path):
-        # Check if the 'manifest' file exists in the target directory
-        app_dir_path = os.path.join(target_dir_path, "app")
-        if os.path.isdir(app_dir_path):
-            # Check if the 'app' directory exists in the target directory
-            manifest_dir_path = os.path.join(app_dir_path, "manifest.json")
-            if os.path.isfile(manifest_dir_path):
-                return True
+    # Check if the 'manifest' file exists in the target directory
+    app_dir_path = os.path.join(cwd, "app")
+    if os.path.isdir(app_dir_path):
+        # Check if the 'app' directory exists in the target directory
+        manifest_dir_path = os.path.join(app_dir_path, "manifest.json")
+        if os.path.isfile(manifest_dir_path):
+            return True
 
     return False
 
 
 def remove_existing_starter_package():
     # Construct the path for the directory we want to remove
-    target_dir_path = get_target_directory_path()
+    cwd = os.getcwd()
+    target_dir_path = os.path.join(cwd, "app")
 
     # Remove the directory with hyphens replaced by underscores and its contents
     if os.path.exists(target_dir_path):

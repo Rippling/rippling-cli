@@ -25,22 +25,8 @@ def create_directory_inside_path(path: str, dir_name: str):
 def extract_zip_to_current_cwd(filename):
     """Extracts the contents of a ZIP archive to a new directory with the same name as the archive inside the current
     working directory. """
-    # Get the current working directory
-    cwd = os.getcwd()
 
-    # Get the directory name from the cwd
-    dir_name = os.path.basename(cwd)
-
-    # Replace any hyphens in the directory name with underscores
-    dir_name = dir_name.replace('-', '_')
-    # Create a new directory with same name inside the current working directory
-    create_directory_inside_path(cwd, dir_name)
-
-    output_path = Path.cwd() / dir_name  # Path to the new directory
-
-    # Create the __init__.py file inside the new directory to make it a package
-    init_file_path = os.path.join(output_path, "__init__.py")
-    open(init_file_path, "w").close()
+    output_path = Path.cwd()  # Path to the new directory
 
     file_path = Path.cwd() / filename  # Path to the zip file
     if filename.endswith(".zip"):
@@ -77,4 +63,4 @@ def delete_zip_file(zip_file_path):
     try:
         os.remove(zip_file_path)
     except FileNotFoundError:
-        raise FileNotFoundError(f"File {zip_file_path} not found.")
+        pass

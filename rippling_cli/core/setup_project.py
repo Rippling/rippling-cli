@@ -25,44 +25,59 @@ def create_run_configurations(project_name: str):
         xml_file.write(get_run_config_xml_content(project_name))
 
 
-def setup_project(name=None, email=None):
-    # Check if pip is available
+def check_python_installed():
+    try:
+        subprocess.check_output(["python", "--version"])
+        return True
+    except FileNotFoundError:
+        return False
+
+
+def install_pip():
+    subprocess.run([sys.executable, "-m", "ensurepip", "--default-pip"])
+    click.echo("pip has been installed.")
+
+
+def check_pip_installed():
     try:
         subprocess.check_output(["pip", "--version"])
     except FileNotFoundError:
-        click.echo("pip is not installed. Installing Python and pip...")
+        click.echo("pip is not installed. Installing pip...")
+        install_pip()
 
-        # Install Python
+
+def install_poetry():
+    subprocess.run(["pip", "install", "poetry"])
+    click.echo("Poetry has been installed.")
+
+
+def check_poetry_installed():
+    try:
+        subprocess.check_output(["poetry", "--version"])
+        return True
+    except FileNotFoundError:
+        return False
+
+
+def setup_project(name=None, email=None):
+    # Check if Python is already installed
+    if not check_python_installed():
+        click.echo("Python is not installed. Installing Python...")
         install_python()
-
-        # Check if Python installation was successful
-        try:
-            subprocess.check_output(["python", "--version"])
-        except FileNotFoundError:
+        if not check_python_installed():
             click.echo("Python installation failed. Please install Python manually.")
             return
 
-        # Install pip using ensurepip
-        subprocess.run([sys.executable, "-m", "ensurepip", "--default-pip"])
-        click.echo("pip has been installed.")
+    # Check if pip is installed
+    check_pip_installed()
 
     # Check if Poetry is installed
-    try:
-        subprocess.check_output(["poetry", "--version"])
-        click.echo("Poetry is already installed.")
-    except FileNotFoundError:
+    if not check_poetry_installed():
         click.echo("Poetry is not installed. Installing Poetry...")
-
-        # Install Poetry using pip
-        subprocess.run(["pip", "install", "poetry"])
-        click.echo("Poetry has been installed.")
-
-    # Check if Poetry is installed successfully
-    try:
-        subprocess.check_output(["poetry", "--version"])
-    except FileNotFoundError:
-        click.echo("Poetry installation failed. Please install Poetry manually.")
-        return
+        install_poetry()
+        if not check_poetry_installed():
+            click.echo("Poetry installation failed. Please install Poetry manually.")
+            return
 
     # Check if pyproject.toml already exists
     if os.path.exists("pyproject.toml"):
@@ -76,8 +91,7 @@ def setup_project(name=None, email=None):
     # Get the current working directory
     current_directory = os.getcwd()
 
-    project_name = os.path.basename(current_directory)  # Default project name
-    project_name.replace("-", "_")
+    project_name = "app"  # Default project name
 
     # Create pyproject.toml file with default content
     create_pyproject_toml(project_name, authors)

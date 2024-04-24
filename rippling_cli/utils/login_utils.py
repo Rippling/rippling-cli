@@ -14,7 +14,7 @@ def ensure_logged_in(ctx: click.Context):
 
 def get_account_info(oauth_token):
     api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {oauth_token}"})
-    endpoint = "/auth_ext/get_account_info"
+    endpoint = "/auth_ext/get_account_info_v2/"
     response = api_client.get(endpoint)
     response.raise_for_status()
     return response.json()
