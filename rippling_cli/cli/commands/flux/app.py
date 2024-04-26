@@ -1,4 +1,3 @@
-
 import click
 
 from rippling_cli.config.config import get_app_config, save_app_config
@@ -27,7 +26,7 @@ def app(ctx: click.Context):
 
 
 @app.command()
-def list():
+def list() -> None:
     """
     Display a list of all apps owned by the developer.
 

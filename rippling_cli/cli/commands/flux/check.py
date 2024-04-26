@@ -19,6 +19,4 @@ def check(ctx: click.Context):
         ctx (click.Context): The context object that holds state across the
     """
     ensure_logged_in(ctx)
-
-    ctx: click.Context = click.get_current_context()
     package_and_validate_bundle(ctx.obj.oauth_token)

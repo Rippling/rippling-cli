@@ -1,10 +1,12 @@
+from typing import Callable, Optional
+
 import click
 
 from rippling_cli.constants import DEFAULT_PAGE_SIZE, RIPPLING_API
 from rippling_cli.core.api_client import APIClient
 
 
-def paginate_data(endpoint: str, oauth_token: str, display_function: callable, data: dict = None):
+def paginate_data(endpoint: str, oauth_token: str, display_function: Callable, data: Optional[dict] = None):
     """
     Paginate the data using the endpoint and display the data using the display function provided.
     :param endpoint:

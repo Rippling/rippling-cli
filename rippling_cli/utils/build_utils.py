@@ -6,6 +6,7 @@ import tempfile
 import zipfile
 from dataclasses import asdict
 from http import client
+from typing import Optional
 
 import click
 
@@ -83,8 +84,8 @@ def get_run_config_xml_content(project_name):
     """
     return f"""
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Flask (flux_dev_tools.server.flask)" type="Python.FlaskServer" \ 
-  nameIsGenerated="true">
+  <configuration default="false" name="Flask (flux_dev_tools.server.flask)" type="Python.FlaskServer"\
+ nameIsGenerated="true">
     <module name="{project_name}" />
     <option name="target" value="flux_dev_tools.server.flask" />
     <option name="targetType" value="PYTHON" />
@@ -394,7 +395,7 @@ def package_and_validate_bundle(oauth_token: str):
     :return:
     """
     # get the s3 upload credentials
-    s3_upload_file_credentials: S3UploadFileCredentials = get_s3_upload_url_credentials("application/zip",
+    s3_upload_file_credentials: Optional[S3UploadFileCredentials] = get_s3_upload_url_credentials("application/zip",
                                                                                         APP_BUILD_MODULE
                                                                                         , oauth_token)
     if not s3_upload_file_credentials:

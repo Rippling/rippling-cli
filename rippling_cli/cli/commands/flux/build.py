@@ -37,7 +37,7 @@ def build(ctx: click.Context):
 
 
 @build.command()
-def init():
+def init() -> None:
     """
     Initialize a new project by downloading and extracting the starter package.
 
@@ -80,7 +80,7 @@ def init():
 
 
 @build.command()
-def list():
+def list() -> None:
     """
     List all builds along with their statuses.
 
@@ -141,7 +141,7 @@ def delete(build_id: str):
 
 
 @build.command()
-def upload():
+def upload() -> None:
     """
     Upload a new build for the current app.
 

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 import click
 
@@ -13,8 +13,8 @@ class Validation:
     is_successful: bool
     error_count: int
     warning_count: int
-    errors: List[Dict[str, any]]
-    warnings: List[Dict[str, any]]
+    errors: List[Dict[str, Any]]
+    warnings: List[Dict[str, Any]]
     log_file_url: Optional[str]
 
 
@@ -46,7 +46,7 @@ class ValidationSummary:
         """
         click.echo(click.style(f"[FAILURE] {name} validation failed ", fg="red", bold=True))
         for error in validation.errors:
-            error_detail = error.get("detail", {})
+            error_detail: dict = error.get("detail", {})
             if "file_path" in error_detail:
                 error_json = error_detail.get("detail", {})
                 click.echo(click.style(f"  - Error: {error_json.get('message')} in {error_json.get('path')} at \
