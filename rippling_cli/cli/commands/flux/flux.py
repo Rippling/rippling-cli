@@ -43,8 +43,8 @@ def flux(ctx: click.Context):
     ensure_logged_in(ctx)
 
 
-flux.add_command(app)  # type: ignore[attr-defined]
-flux.add_command(build)  # type: ignore[attr-defined]
-flux.add_command(check)  # type: ignore[attr-defined]
-flux.add_command(install)  # type: ignore[attr-defined]
-flux.add_command(uninstall)  # type: ignore[attr-defined]
+flux.add_command(app)  # type: ignore
+flux.add_command(build)  # type: ignore
+flux.add_command(check)  # type: ignore
+flux.add_command(install)  # type: ignore
+flux.add_command(uninstall)  # type: ignore

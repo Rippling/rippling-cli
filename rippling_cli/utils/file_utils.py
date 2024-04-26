@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Optional
 
 import click
-import requests  # type: ignore[attr-defined]
+import requests  # type: ignore
 
 from rippling_cli.exceptions.build_exceptions import DirectoryCreationFailed
 

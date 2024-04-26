@@ -5,7 +5,7 @@ from datetime import datetime
 from urllib.parse import parse_qs
 
 import click
-import requests  # type: ignore[attr-defined]
+import requests  # type: ignore
 
 from rippling_cli.config.config import get_oauth_token_data
 from rippling_cli.constants import RIPPLING_API, RIPPLING_BASE_URL

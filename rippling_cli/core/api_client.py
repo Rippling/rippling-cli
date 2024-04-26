@@ -1,6 +1,6 @@
 from http import client
 
-import requests  # type: ignore[attr-defined]
+import requests  # type: ignore
 
 
 class APIClient:
