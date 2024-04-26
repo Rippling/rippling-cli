@@ -118,7 +118,7 @@ description = ""
 authors = ["{authors}"]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 
 [tool.poetry.dev-dependencies]
 rippling-flux-sdk = "^0.20"
