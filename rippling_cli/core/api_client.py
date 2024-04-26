@@ -1,3 +1,5 @@
+from http import client
+
 import requests  # type: ignore
 
 
@@ -6,24 +8,25 @@ class APIClient:
         self.base_url = base_url
         self.headers = headers or {}
 
-    def make_request(self, method, endpoint, params=None, data=None, stream=False):
+    def make_request(self, method, endpoint, params=None, json=None, data=None, stream=False, files=None):
         url = f"{self.base_url.rstrip('/')}/{endpoint.lstrip('/')}"
-        response = requests.request(method, url, params=params, json=data, headers=self.headers, stream=stream)
+        response = requests.request(method, url, params=params, json=json, data=data, headers=self.headers,
+                                    stream=stream, files=files)
         return response
 
     def get(self, endpoint, params=None, stream=False):
         return self.make_request("GET", endpoint, params=params, stream=stream)
 
-    def post(self, endpoint, data=None):
-        return self.make_request("POST", endpoint, data=data)
+    def post(self, endpoint, data=None, files=None):
+        return self.make_request("POST", endpoint, data=data, files=files)
 
     def put(self, endpoint, data):
         return self.make_request("PUT", endpoint, data=data)
 
-    def delete(self, endpoint, params=None):
-        return self.make_request("DELETE", endpoint, params=params)
+    def delete(self, endpoint, params=None, data=None):
+        return self.make_request("DELETE", endpoint, params=params, data=data)
 
-    def find_paginated(self, endpoint, page=1, page_size=10, read_preference="SECONDARY_PREFERRED"):
+    def find_paginated(self, endpoint, page=1, page_size=10, read_preference="SECONDARY_PREFERRED", data=None):
         """
         Fetch paginated data from the API.
 
@@ -57,13 +60,15 @@ class APIClient:
                 "pageSize": page_size,
                 "readPreference": read_preference
             }
-            response = self.make_request("POST", f"{endpoint}/find_paginated", data=payload)
+            if data:
+                payload.update(data)
+            response = self.make_request("POST", f"{endpoint}/find_paginated", json=payload)
 
-            if response.status_code == 200:
-                data = response.json()
-                cursor = data.get("cursor")
+            if response.status_code == client.OK:
+                response_json = response.json()
+                cursor = response_json.get("cursor")
                 has_more = False if not cursor else True
-                items = data["data"]
+                items = response_json["data"]
                 page += 1
                 yield items
             else:

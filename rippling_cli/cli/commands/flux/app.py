@@ -2,44 +2,62 @@
 import click
 
 from rippling_cli.config.config import get_app_config, save_app_config
-from rippling_cli.constants import RIPPLING_API
-from rippling_cli.core.api_client import APIClient
-from rippling_cli.utils.app_utils import get_app_from_id
+from rippling_cli.utils.api_utils import get_data_by_id
+from rippling_cli.utils.app_utils import display_apps
 from rippling_cli.utils.login_utils import ensure_logged_in
+from rippling_cli.utils.pagination_utils import paginate_data
 
 
 @click.group()
 @click.pass_context
-def app(ctx: click.Context) -> None:
-    """Manage flux apps"""
+def app(ctx: click.Context):
+    """
+    Manage flux apps.
+
+    This command group is the entry point for managing flux apps. It provides
+    subcommands for various app-related operations, such as listing all apps,
+    setting the current app for the directory, and displaying the currently
+    selected app.
+
+    Args:
+        ctx (click.Context): The context object that holds state across the
+            entire command execution.
+    """
     ensure_logged_in(ctx)
 
 
 @app.command()
-def list() -> None:
-    """This command displays a list of all apps owned by the developer."""
+def list():
+    """
+    Display a list of all apps owned by the developer.
+
+    This command retrieves and displays a list of all apps owned by the
+    currently logged-in developer. It paginates the data and displays the
+    app ID, display name, and app name for each app.
+
+    """
     ctx: click.Context = click.get_current_context()
-    api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {ctx.obj.oauth_token}"})
     endpoint = "/apps/api/integrations"
-
-    for page in api_client.find_paginated(endpoint):
-        click.echo(f"Page: {len(page)} apps")
-
-        for app in page:
-            click.echo(f"- {app.get('displayName')} ({app.get('id')})")
-
-        if not click.confirm("Continue"):
-            break
-
-    click.echo("End of apps list.")
+    paginate_data(endpoint, ctx.obj.oauth_token, display_apps)
 
 
 @app.command()
 @click.option("--app_id", required=True, type=str, help="The app id to set for the current directory.")
-def set(app_id: str) -> None:
-    """This command sets the current app within the app_config.json file located in the .rippling directory."""
+def set(app_id: str):
+    """
+    Set the current app within the app_config.json file.
+
+    This command sets the current app within the app_config.json file located
+    in the .rippling directory. It saves the app ID, display name, and app name
+    in the config file.
+
+    Args:
+        app_id (str): The ID of the app to set as the current app.
+
+    """
     ctx: click.Context = click.get_current_context()
-    app_json = get_app_from_id(app_id, ctx.obj.oauth_token)
+    endpoint = "/apps/api/apps/?large_get_query=true"
+    app_json = get_data_by_id(app_id, ctx.obj.oauth_token, endpoint)
 
     if not app_json:
         click.echo(f"Invalid app id: {app_id}")
@@ -53,8 +71,15 @@ def set(app_id: str) -> None:
 
 
 @app.command()
-def current() -> None:
-    """This command indicates the current app selected by the developer within the directory."""
+def current():
+    """
+    Display the currently selected app.
+
+    This command indicates the current app selected by the developer within
+    the directory. It reads the app_config.json file and displays the display
+    name and ID of the currently selected app.
+
+    """
     app_config = get_app_config()
     if not app_config or len(app_config.keys()) == 0:
         click.echo("No app selected.")

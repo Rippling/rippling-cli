@@ -24,6 +24,7 @@ def cli(ctx):
 
     Available Commands:
       login   Authenticate and authorize with Rippling services.
+      flux    Manage Rippling Flux apps and integrations.
 
     Options:
       -h, --help     Show this message and exit.
