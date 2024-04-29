@@ -65,7 +65,8 @@ def delete_app_install_for_app(spoke_handle: str, company_id: str, oauth_token: 
     app_install_id = app_install_json.get("id")
 
     endpoint = f"/hub/api/app_installs/{app_install_id}"
-    return delete_data_by_id(oauth_token, endpoint)
+    app_install_deleted, message = delete_data_by_id(oauth_token, endpoint)
+    return app_install_deleted
 
 
 def install_app_for_company(app_name: str, oauth_token: str):

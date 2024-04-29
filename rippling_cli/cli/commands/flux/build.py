@@ -150,9 +150,10 @@ def delete(build_id: str):
     """
     ctx: click.Context = click.get_current_context()
     endpoint = f"/apps/api/app_builds/{build_id}"
-    is_build_deleted = delete_data_by_id(ctx.obj.oauth_token, endpoint)
+    is_build_deleted, message = delete_data_by_id(ctx.obj.oauth_token, endpoint)
+    message = "Failed to delete the build." if not message else message
     if not is_build_deleted:
-        click.echo("Failed to delete the build.")
+        click.echo(message)
         return
     click.echo(f"Build {build_id} deleted successfully.")
 

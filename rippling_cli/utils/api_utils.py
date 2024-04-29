@@ -30,4 +30,5 @@ def delete_data_by_id(oauth_token, endpoint: str):
     """
     api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {oauth_token}"})
     response = api_client.delete(endpoint)
-    return response.status_code == client.OK
+    message = response.json().get("message") if response.status_code == client.BAD_REQUEST else None
+    return response.status_code == client.OK, message
