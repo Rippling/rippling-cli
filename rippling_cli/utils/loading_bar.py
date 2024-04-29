@@ -77,7 +77,7 @@ def get_total_bar_length(loading_bar: LoadingBar) -> int:
     return total_length
 
 
-def stop_loading_bar(loading_bar: LoadingBar, success_message: str = None):
+def stop_loading_bar(loading_bar: LoadingBar, success_message: Optional[str] = None):
     """
     Stop the loading bar, clear the loading bar and print the success message.
     :param loading_bar:
