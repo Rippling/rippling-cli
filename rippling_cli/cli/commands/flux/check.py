@@ -1,5 +1,6 @@
 import click
 
+from rippling_cli.config.config import get_app_config
 from rippling_cli.utils.build_utils import package_and_validate_bundle
 from rippling_cli.utils.login_utils import ensure_logged_in
 
@@ -19,4 +20,8 @@ def check(ctx: click.Context):
         ctx (click.Context): The context object that holds state across the
     """
     ensure_logged_in(ctx)
+    app_config = get_app_config()
+    if not app_config or len(app_config.keys()) == 0:
+        click.echo("No app found for the context. Please set the app using the 'set' command")
+        return
     package_and_validate_bundle(ctx.obj.oauth_token)

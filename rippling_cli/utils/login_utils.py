@@ -1,3 +1,5 @@
+from http import client
+
 import click
 
 from rippling_cli.cli.commands.login import login
@@ -16,7 +18,8 @@ def get_account_info(oauth_token):
     api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {oauth_token}"})
     endpoint = "/auth_ext/get_account_info_v2/"
     response = api_client.get(endpoint)
-    response.raise_for_status()
+    if response.status_code != client.OK:
+        return {}
     return response.json()
 
 
@@ -24,7 +27,8 @@ def get_employee_details(role_id, oauth_token):
     api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {oauth_token}"})
     endpoint = f"/api/hub/api/employment_roles_with_company/{role_id}"
     response = api_client.get(endpoint)
-    response.raise_for_status()
+    if response.status_code != client.OK:
+        return {}
     return response.json()
 
 

@@ -1,3 +1,4 @@
+from http import client
 from typing import Optional
 
 from rippling_cli.core.s3 import S3UploadFileCredentials
@@ -15,7 +16,8 @@ def get_s3_upload_url_credentials(content_type, module, oauth_token) -> Optional
     api_client = get_api_client_with_role_company(oauth_token)
     endpoint = f"/hub/api/get_upload_url?contentType={content_type}&module={module}&preview_url=true"
     response = api_client.get(endpoint)
-    response.raise_for_status()
+    if response.status_code != client.OK:
+        return None
     data = response.json().get("data")
     return S3UploadFileCredentials(url=data.get("url", ""),
                                    key=data.get("fields", {}).get("key", ""),

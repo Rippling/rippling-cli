@@ -1,8 +1,9 @@
 import click
 
 from rippling_cli.config.config import get_app_config, save_app_config
+from rippling_cli.constants import RIPPLING_BASE_URL
 from rippling_cli.utils.api_utils import get_data_by_id
-from rippling_cli.utils.app_utils import display_apps
+from rippling_cli.utils.app_utils import delete_app_install_for_app, display_apps, install_app_for_company
 from rippling_cli.utils.login_utils import ensure_logged_in
 from rippling_cli.utils.pagination_utils import paginate_data
 
@@ -18,15 +19,19 @@ def app(ctx: click.Context):
     setting the current app for the directory, and displaying the currently
     selected app.
 
-    Args:
-        ctx (click.Context): The context object that holds state across the
-            entire command execution.
+    Commands:
+        - list: Display a list of all apps owned by the developer.
+        - set: Set the current app within the directory.
+        - current: Display the currently selected app.
+        - install: Install an app for a company.
+        - uninstall: Uninstall an app for a company.
     """
     ensure_logged_in(ctx)
 
 
 @app.command()
-def list() -> None:
+@click.option("--search_query", type=str, help="search query to filter apps.")
+def list(search_query: str) -> None:
     """
     Display a list of all apps owned by the developer.
 
@@ -37,7 +42,7 @@ def list() -> None:
     """
     ctx: click.Context = click.get_current_context()
     endpoint = "/apps/api/integrations"
-    paginate_data(endpoint, ctx.obj.oauth_token, display_apps)
+    paginate_data(endpoint, ctx.obj.oauth_token, display_apps, search_query=search_query)
 
 
 @app.command()
@@ -55,8 +60,8 @@ def set(app_id: str):
 
     """
     ctx: click.Context = click.get_current_context()
-    endpoint = "/apps/api/apps/?large_get_query=true"
-    app_json = get_data_by_id(app_id, ctx.obj.oauth_token, endpoint)
+    endpoint = f"/apps/api/apps/{app_id}"
+    app_json = get_data_by_id(ctx.obj.oauth_token, endpoint)
 
     if not app_json:
         click.echo(f"Invalid app id: {app_id}")
@@ -85,3 +90,69 @@ def current():
         return
 
     click.echo(f"{app_config.get('displayName')} ({app_config.get('id')})")
+
+
+@app.command()
+def install() -> None:
+    """
+    Install the current app by opening the url on the browser.
+    :param ctx:
+    :return:
+    """
+    ctx: click.Context = click.get_current_context()
+    app_config = get_app_config()
+    if not app_config or len(app_config.keys()) == 0:
+        click.echo("No app found for the context. Please set the app using the 'set' command")
+        return
+
+    resp_json, continue_installation = install_app_for_company(app_config.get("name"), ctx.obj.oauth_token)
+    message = resp_json and resp_json.get("message")
+    if not resp_json:
+        message = "Failed to install the app."
+
+    click.echo(message)
+
+    if not continue_installation:
+        return
+
+    installation_url = resp_json.get("installation_url")
+    click.echo(
+        click.style("Opening the installation url: ", fg="green", bold=True)
+        + click.style(RIPPLING_BASE_URL + installation_url, fg="blue", underline=True)
+    )
+    click.launch(RIPPLING_BASE_URL + installation_url)
+
+
+@app.command()
+def uninstall() -> None:
+    """
+    Uninstall the current app by calling the uninstall endpoint.
+    :param ctx:
+    :return:
+    """
+    ctx: click.Context = click.get_current_context()
+    app_config = get_app_config()
+    if not app_config or len(app_config.keys()) == 0:
+        click.echo("No app found for the context. Please set the app using the 'set' command")
+        return
+
+    endpoint = f"/apps/api/apps/{app_config.get('id')}"
+    app_json = get_data_by_id(ctx.obj.oauth_token, endpoint)
+
+    if not app_json:
+        click.echo("Failed to uninstall the app.")
+        return
+
+    spoke_handle = app_json.get("spoke", {}).get("handle")
+    company_id = app_json.get("spoke", {}).get("company")
+
+    if not spoke_handle or not company_id:
+        click.echo("Failed to uninstall the app.")
+        return
+
+    uninstall_succeeded = delete_app_install_for_app(spoke_handle, company_id, ctx.obj.oauth_token)
+    if not uninstall_succeeded:
+        click.echo("Failed to uninstall the app.")
+        return
+
+    click.echo("Successfully uninstalled the app.")

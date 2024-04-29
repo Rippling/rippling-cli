@@ -18,19 +18,17 @@ def get_starter_package_for_app(oauth_token):
     app_config = get_app_config()
     endpoint = f"/apps/api/flux_apps/get_starter_package?app_name={app_config.get('name')}"
     response = api_client.post(endpoint)
-    response.raise_for_status()
+    if response.status_code != client.OK:
+        return None
     return response.json().get("link")
 
 
-def display_apps(apps, page_number):
+def display_apps(apps):
     """
     Display the apps.
     :param apps:
-    :param page_number:
     :return:
     """
-    click.echo(f"Page {page_number}: {len(apps)} apps")
-
     for app in apps:
         click.echo(f"- {app.get('displayName')} ({app.get('id')})")
 
@@ -68,3 +66,19 @@ def delete_app_install_for_app(spoke_handle: str, company_id: str, oauth_token: 
 
     endpoint = f"/hub/api/app_installs/{app_install_id}"
     return delete_data_by_id(oauth_token, endpoint)
+
+
+def install_app_for_company(app_name: str, oauth_token: str):
+    endpoint = "/apps/api/flux_app_install/install_flux_app_for_company"
+    payload = {
+        "appName": str(app_name),
+    }
+    api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {oauth_token}"})
+    response = api_client.post(endpoint, data=payload)
+
+    if response.status_code in [client.OK, client.BAD_REQUEST]:
+        continue_installation = response.status_code == client.OK \
+                                and response.json().get("message") == f"App {app_name} has installation steps in UI"
+        return response.json(), continue_installation
+
+    return None, False

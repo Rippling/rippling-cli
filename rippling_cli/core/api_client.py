@@ -26,7 +26,8 @@ class APIClient:
     def delete(self, endpoint, params=None, data=None):
         return self.make_request("DELETE", endpoint, params=params, data=data)
 
-    def find_paginated(self, endpoint, page=1, page_size=10, read_preference="SECONDARY_PREFERRED", data=None):
+    def find_paginated(self, endpoint, page=1, page_size=10, read_preference="SECONDARY_PREFERRED",
+                       data=None, search_query=""):
         """
         Fetch paginated data from the API.
 
@@ -38,6 +39,8 @@ class APIClient:
 
         Yields:
             dict: The data from the API response.
+            :param search_query:
+            :param data:
             :param endpoint:
             :param page:
             :param page_size:
@@ -55,7 +58,8 @@ class APIClient:
                         "column": {
                             "sortKey": "createdAt"
                         }
-                    }
+                    },
+                    "searchQuery": search_query
                 },
                 "pageSize": page_size,
                 "readPreference": read_preference
@@ -72,5 +76,4 @@ class APIClient:
                 page += 1
                 yield items
             else:
-                response.raise_for_status()
                 break

@@ -1,5 +1,6 @@
 import os
 import zipfile
+from http import client
 from pathlib import Path
 from typing import Optional
 
@@ -58,7 +59,8 @@ def download_file_using_url(url: str, filename: Optional[str] = None):
     output_file = output_path / filename
     try:
         response = requests.get(url, stream=True)
-        response.raise_for_status()
+        if response.status_code != client.OK:
+            return False
         with open(output_file, "wb") as file:
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)

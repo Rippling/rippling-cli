@@ -4,7 +4,7 @@ from rippling_cli.constants import RIPPLING_API
 from rippling_cli.core.api_client import APIClient
 
 
-def get_data_by_id(item_id, oauth_token, endpoint: str):
+def get_data_by_id(oauth_token, endpoint: str):
     """
     Get data by id from the endpoint.
     :param item_id:
@@ -14,12 +14,11 @@ def get_data_by_id(item_id, oauth_token, endpoint: str):
     """
     api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {oauth_token}"})
 
-    response = api_client.post(endpoint, data={"query": f"id={item_id}&limit=1"})
+    response = api_client.get(endpoint)
     data_list = response.json() if response.status_code == client.OK else []
-
     if response.status_code != client.OK or len(data_list) == 0:
         return None
-    return data_list[0]
+    return data_list
 
 
 def delete_data_by_id(oauth_token, endpoint: str):
@@ -31,5 +30,4 @@ def delete_data_by_id(oauth_token, endpoint: str):
     """
     api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {oauth_token}"})
     response = api_client.delete(endpoint)
-    response.raise_for_status()
     return response.status_code == client.OK

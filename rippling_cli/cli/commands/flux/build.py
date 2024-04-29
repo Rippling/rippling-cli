@@ -28,10 +28,13 @@ def build(ctx: click.Context):
     project, listing all builds, downloading a specific build, deleting a build,
     uploading a new build, and deploying a build.
 
-    Args:
-        ctx (click.Context): The context object that holds state across the
-            entire command execution.
-
+    Commands:
+        - init: Initialize a new project by downloading and extracting the starter package.
+        - list: Display a list of all builds for the current app.
+        - download: Download a specific build for the current app.
+        - delete: Delete a specific build for the current app.
+        - upload: Upload a new build for the current app.
+        - deploy: Deploy a specific build for the current app.
     """
     ensure_logged_in(ctx)
 
@@ -51,6 +54,12 @@ def init() -> None:
     """
     ctx: click.Context = click.get_current_context()
 
+    app_config = get_app_config()
+
+    if not app_config or len(app_config.keys()) == 0:
+        click.echo("No app found for the context. Please set the app using the 'set' command")
+        return
+
     if starter_package_already_extracted_on_current_directory():
         if not click.confirm("Starter package already extracted. Do you want to replace?"):
             return
@@ -61,7 +70,7 @@ def init() -> None:
     if not download_url:
         click.echo("No starter package found.")
         return
-    app_config = get_app_config()
+
     app_display_name = app_config.get('displayName')
     filename = app_display_name + ".zip"
     # download the starter package
@@ -80,7 +89,8 @@ def init() -> None:
 
 
 @build.command()
-def list() -> None:
+@click.option("--search_query", type=str, help="search query to filter builds")
+def list(search_query: str) -> None:
     """
     List all builds along with their statuses.
 
@@ -90,10 +100,14 @@ def list() -> None:
 
     """
     ctx: click.Context = click.get_current_context()
+    app_config = get_app_config()
+    if not app_config or len(app_config.keys()) == 0:
+        click.echo("No app found for the context. Please set the app using the 'set' command")
+        return
     endpoint = "/apps/api/app_builds"
-    app_name = get_app_config().get("name")
+    app_name = app_config.get("name")
     data = {"app_name": app_name}
-    paginate_data(endpoint, ctx.obj.oauth_token, display_builds, data=data)
+    paginate_data(endpoint, ctx.obj.oauth_token, display_builds, data=data, search_query=search_query)
 
 
 @build.command()
@@ -111,12 +125,15 @@ def download(build_id: str):
 
     """
     ctx: click.Context = click.get_current_context()
-    endpoint = "/apps/api/app_builds/?large_get_query=true"
-    build_json = get_data_by_id(build_id, ctx.obj.oauth_token, endpoint)
+    endpoint = f"/apps/api/app_builds/{build_id}"
+    build_json = get_data_by_id(ctx.obj.oauth_token, endpoint)
     build_url = build_json.get("build_file")
     build_name = build_json.get("name")
     build_file_name = build_name + ".zip"
-    download_file_using_url(build_url, build_file_name)
+    is_file_downloaded = download_file_using_url(build_url, build_file_name)
+    if not is_file_downloaded:
+        click.echo("Failed to download the build.")
+        return
 
 
 @build.command()
@@ -153,9 +170,13 @@ def upload() -> None:
     """
     ctx: click.Context = click.get_current_context()
 
+    app_config = get_app_config()
+    if not app_config or len(app_config.keys()) == 0:
+        click.echo("No app found for the context. Please set the app using the 'set' command")
+        return
+
     click.echo(click.style('Uploading app build...', fg='yellow'))
 
-    app_config = get_app_config()
     suggested_build_name, s3_upload_file_credentials = package_and_validate_bundle(ctx.obj.oauth_token)
 
     if not s3_upload_file_credentials or not suggested_build_name:
@@ -190,6 +211,10 @@ def deploy(build_id: str):
     ctx: click.Context = click.get_current_context()
     # deploy the build
     app_config = get_app_config()
+    if not app_config or len(app_config.keys()) == 0:
+        click.echo("No app found for the context. Please set the app using the 'set' command")
+        return
+
     is_deployed = deploy_build(app_config.get("name"), build_id, ctx.obj.oauth_token)
     if not is_deployed:
         click.echo("Failed to deploy the build.")

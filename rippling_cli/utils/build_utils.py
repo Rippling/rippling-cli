@@ -14,15 +14,13 @@ from rippling_cli.config.config import get_app_config
 from rippling_cli.constants import (
     APP_BUILD_MODULE,
     APP_FOLDER,
-    PACKAGE_AND_UPLOAD_APP_TOTAL_STEPS,
     PYPROJECT_TOML,
     RIPPLING_API,
-    VALIDATING_BUNDLE_TOTAL_STEPS,
 )
 from rippling_cli.core.api_client import APIClient
 from rippling_cli.core.s3 import S3UploadFileCredentials
+from rippling_cli.utils.loading_bar import start_circular_loading_bar, start_loading_bar, stop_loading_bar
 from rippling_cli.utils.login_utils import get_api_client_with_role_company
-from rippling_cli.utils.progress_bar import report_progress_steps
 from rippling_cli.utils.s3_utils import get_s3_upload_url_credentials
 from rippling_cli.utils.validation_summary import Validation, ValidationSummary
 
@@ -145,14 +143,12 @@ def create_pyproject_toml(project_name="my-project", authors="developer <develop
     click.echo("pyproject.toml file created.")
 
 
-def display_builds(builds, page_number):
+def display_builds(builds):
     """
     Display the builds in the console.
     :param builds:
-    :param page_number:
     :return:
     """
-    click.echo(f"Page {page_number}: {len(builds)} builds")
 
     for build in builds:
         click.echo(
@@ -270,7 +266,6 @@ def upload_zip_file_to_s3(content_type, file_path: str, s3_upload_file_credentia
         data['Content-Type'] = content_type
         files = {'file': f}
         response = api_client.post("/", files=files, data=data)
-        response.raise_for_status()
         return response.status_code == client.NO_CONTENT
 
 
@@ -280,35 +275,27 @@ def package_and_upload_app_with_dependencies(s3_upload_file_credentials: S3Uploa
     :param s3_upload_file_credentials: S3UploadFileCredentials
     :return:
     """
-
-    progress_iterator = report_progress_steps(PACKAGE_AND_UPLOAD_APP_TOTAL_STEPS)
     # Get the non-dev dependencies from pyproject.toml
     dependencies = get_dependencies_from_pyproject(PYPROJECT_TOML)
-    next(progress_iterator)  # Report progress
 
     # Create a temporary directory
     with tempfile.TemporaryDirectory() as temp_dir:
         # Create a temporary requirements.txt file
         requirements_file = os.path.join(temp_dir, 'requirements.txt')
         create_requirements_file(dependencies, requirements_file)
-        next(progress_iterator)  # Report progress
 
         # Install the non-dev dependencies in the temporary directory
         install_dependencies(requirements_file, temp_dir)
-        next(progress_iterator)  # Report progress
 
         # Clean up the temporary requirements.txt file
         if os.path.exists(requirements_file):
             os.remove(requirements_file)
-        next(progress_iterator)  # Report progress
         # Create a zip file containing the app folder and its dependencies
         zip_filename = temp_dir + 'app_with_dependencies.zip'
         create_zip_file(APP_FOLDER, temp_dir, zip_filename)
-        next(progress_iterator)  # Report progress
 
         # Upload the zip file to S3
         upload_zip_file_to_s3('application/zip', zip_filename, s3_upload_file_credentials)
-        next(progress_iterator)  # Report progress
 
     return True
 
@@ -321,14 +308,12 @@ def validate_bundle(app_name: str, build_s3_url: str, oauth_token: str):
     :param oauth_token:
     :return:
     """
-    progress_iterator = report_progress_steps(VALIDATING_BUNDLE_TOTAL_STEPS)
     api_client = APIClient(base_url=RIPPLING_API, headers={"Authorization": f"Bearer {oauth_token}"})
     data = {
         "app_name": app_name,
         "build_s3_url": build_s3_url
     }
     response = api_client.post('/apps/api/app_builds/validate', data=data)
-    next(progress_iterator)  # Report progress
 
     if response.status_code not in [client.BAD_REQUEST, client.OK]:
         return False, None, None
@@ -339,7 +324,6 @@ def validate_bundle(app_name: str, build_s3_url: str, oauth_token: str):
         name: Validation(name=name, **validation_data)
         for name, validation_data in response_json["validations"].items()
     }
-    next(progress_iterator)  # Report progress
 
     suggested_build_name = response_json.get("suggested_build_name", None)
     # Create a ValidationSummary instance and print the summary
@@ -395,6 +379,7 @@ def package_and_validate_bundle(oauth_token: str):
     :return:
     """
     # get the s3 upload credentials
+
     s3_upload_file_credentials: Optional[S3UploadFileCredentials] = get_s3_upload_url_credentials("application/zip",
                                                                                         APP_BUILD_MODULE
                                                                                         , oauth_token)
@@ -403,10 +388,10 @@ def package_and_validate_bundle(oauth_token: str):
         return None, None
 
     # package and upload the app with dependencies to s3
-    from rippling_cli.utils.progress_bar import report_progress
-    with report_progress(PACKAGE_AND_UPLOAD_APP_TOTAL_STEPS, 'Packaging and Uploading bundle'):
-        upload_steps = package_and_upload_app_with_dependencies(s3_upload_file_credentials)
-
+    click.echo(click.style('Packaging and Uploading', fg='yellow'))
+    loading_bar = start_circular_loading_bar(length=0)
+    upload_steps = package_and_upload_app_with_dependencies(s3_upload_file_credentials)
+    stop_loading_bar(loading_bar)
     if not upload_steps:
         click.echo("Failed to upload the app.")
         return None, None
@@ -418,11 +403,11 @@ def package_and_validate_bundle(oauth_token: str):
 
     # validate the build
     click.echo(click.style('Validating app bundle...', fg='cyan'))
-    with report_progress(VALIDATING_BUNDLE_TOTAL_STEPS, 'Validating'):
-        validation_successful, suggested_build_name, summary = validate_bundle(app_config.get("name"),
-                                                                               s3_upload_file_credentials.s3_build_url,
-                                                                               oauth_token)
-
+    loading_bar = start_loading_bar(length=20, label="Validating", char='#')
+    validation_successful, suggested_build_name, summary = validate_bundle(app_config.get("name"),
+                                                                           s3_upload_file_credentials.s3_build_url,
+                                                                           oauth_token)
+    stop_loading_bar(loading_bar)
     if summary:
         # print the validation summary
         summary.print_summary()

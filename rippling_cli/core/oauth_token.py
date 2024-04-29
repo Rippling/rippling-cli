@@ -2,6 +2,7 @@ import http.server
 import socketserver
 import threading
 from datetime import datetime
+from http import client
 from urllib.parse import parse_qs
 
 import click
@@ -83,7 +84,8 @@ class OAuthToken:
             "Content-Type": "application/json"
         }
         response = requests.post(f"{RIPPLING_API}/o/token/", data=data, allow_redirects=False)
-        response.raise_for_status()
+        if response.status_code != client.OK:
+            raise Exception(f"Failed to exchange authorization code for token: {response.text}")
         self.expires_in = response.json()["expires_in"]
         return response.json()["access_token"]
 
