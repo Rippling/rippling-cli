@@ -1,6 +1,3 @@
-import os
-import subprocess
-import sys
 from http import HTTPStatus
 
 from rippling_cli.constants import RIPPLING_API
