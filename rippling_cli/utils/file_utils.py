@@ -1,5 +1,6 @@
 import os
 import zipfile
+from http import client
 from pathlib import Path
 from typing import Optional
 
@@ -10,6 +11,12 @@ from rippling_cli.exceptions.build_exceptions import DirectoryCreationFailed
 
 
 def create_directory_inside_path(path: str, dir_name: str):
+    """
+    Creates a new directory inside the specified path.
+    :param path:
+    :param dir_name:
+    :return:
+    """
     # Construct the path for the new directory
     new_dir_path = os.path.join(path, dir_name)
 
@@ -23,8 +30,11 @@ def create_directory_inside_path(path: str, dir_name: str):
 
 
 def extract_zip_to_current_cwd(filename):
-    """Extracts the contents of a ZIP archive to a new directory with the same name as the archive inside the current
-    working directory. """
+    """
+    Extracts the contents of a zip file to the current working directory.
+    :param filename:
+    :return:
+    """
 
     output_path = Path.cwd()  # Path to the new directory
 
@@ -32,18 +42,25 @@ def extract_zip_to_current_cwd(filename):
     if filename.endswith(".zip"):
         with zipfile.ZipFile(file_path, "r") as zip_ref:
             zip_ref.extractall(output_path)
-            click.echo("ZIP archive extracted successfully.")
+            click.echo("Starter package extracted successfully.")
 
     delete_zip_file(file_path)
 
 
-def download_file_using_url(url: str, app_display_name: Optional[str] = None):
-    filename = app_display_name if app_display_name else url.split("/")[-1]
+def download_file_using_url(url: str, filename: Optional[str] = None):
+    """
+    Downloads a file from a URL and saves it to the current working directory.
+    :param url:
+    :param filename:
+    :return:
+    """
+    filename = url.split("/")[-1] if not filename else filename
     output_path = Path.cwd()
     output_file = output_path / filename
     try:
         response = requests.get(url, stream=True)
-        response.raise_for_status()
+        if response.status_code != client.OK:
+            return False
         with open(output_file, "wb") as file:
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
