@@ -52,6 +52,12 @@ def get_app_install_by_spoke_handle_and_company(spoke_handle: str, company_id: s
 
 
 def get_spoke_handle_and_company_for_app(id: str, oauth_token: str):
+    """
+    Get the spoke handle and company id for the app.
+    :param id:
+    :param oauth_token:
+    :return:
+    """
     endpoint = f"/apps/api/apps/{id}"
     app_json = get_data_by_id(oauth_token, endpoint)
 
@@ -107,6 +113,11 @@ def install_app_for_company(app_name: str, oauth_token: str):
     return None, False
 
 def get_app_install(oauth_token):
+    """
+    Get the app install for the app.
+    :param oauth_token:
+    :return:
+    """
     app_config = get_app_config()
     if not app_config or len(app_config.keys()) == 0:
         return None

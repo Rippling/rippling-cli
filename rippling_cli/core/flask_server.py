@@ -4,12 +4,19 @@ import subprocess
 
 
 class FlaskServer:
+    """
+    Class to manage the Flask server for local development by starting the server and stopping it.
+    """
     def __init__(self, debug=None, port=5000):
         self.debug = debug
         self.port = port
         self.process = None
 
     def start(self):
+        """
+        Start the Flask server.
+        :return:
+        """
         env = os.environ.copy()
         env["FLASK_APP"] = "flux_dev_tools.server.flask"
         flask_command = ["python", "-m", "flask", "run", "--port", str(self.port)]
@@ -18,6 +25,10 @@ class FlaskServer:
         self.process = subprocess.Popen(flask_command, env=env, preexec_fn=os.setsid)
         return self.process
     def stop(self):
+        """
+        Stop the Flask server.
+        :return:
+        """
         if self.process:
             try:
                 # Send the signal to the entire process group

@@ -31,6 +31,8 @@ def app(ctx: click.Context):
         - current: Display the currently selected app.
         - install: Install an app for a company.
         - uninstall: Uninstall an app for a company.
+        - connect: Set the forwarding URL for the app install
+            using the specified URL and timeout and validate the URL
     """
     ensure_logged_in(ctx)
 
@@ -167,6 +169,13 @@ def uninstall() -> None:
 @click.option("--forwarding_url", "-fu", required=True, type=str, help="The app id to set for the current directory.")
 @click.option( "--timeout", "-t",type=int, default=3600, help="Timeout for port forwarding (in seconds).")
 def connect(forwarding_url, timeout) -> None:
+    """
+    Set the forwarding URL for the app install using the specified URL and timeout and validate the URL
+    by checking if it is forwarding to the local server.
+    :param forwarding_url:
+    :param timeout:
+    :return:
+    """
     ctx: click.Context = click.get_current_context()
 
     app_install_json = get_app_install(ctx.obj.oauth_token)
