@@ -5,7 +5,7 @@ import subprocess
 import tempfile
 import zipfile
 from dataclasses import asdict
-from http import client
+from http import HTTPStatus
 from typing import Optional
 
 import click
@@ -266,7 +266,7 @@ def upload_zip_file_to_s3(content_type, file_path: str, s3_upload_file_credentia
         data['Content-Type'] = content_type
         files = {'file': f}
         response = api_client.post("/", files=files, data=data)
-        return response.status_code == client.NO_CONTENT
+        return response.status_code == HTTPStatus.NO_CONTENT
 
 
 def package_and_upload_app_with_dependencies(s3_upload_file_credentials: S3UploadFileCredentials):
@@ -315,7 +315,7 @@ def validate_bundle(app_name: str, build_s3_url: str, oauth_token: str):
     }
     response = api_client.post('/apps/api/app_builds/validate', data=data)
 
-    if response.status_code not in [client.BAD_REQUEST, client.OK]:
+    if response.status_code not in [HTTPStatus.BAD_REQUEST, HTTPStatus.OK]:
         return False, None, None
 
     response_json = response.json()
@@ -329,7 +329,7 @@ def validate_bundle(app_name: str, build_s3_url: str, oauth_token: str):
     # Create a ValidationSummary instance and print the summary
     summary = ValidationSummary(validations)
 
-    return response.status_code == client.OK, suggested_build_name, summary
+    return response.status_code == HTTPStatus.OK, suggested_build_name, summary
 
 
 def create_build(app_name: str, build_s3_url: str, name: str, oauth_token: str):
@@ -349,8 +349,7 @@ def create_build(app_name: str, build_s3_url: str, name: str, oauth_token: str):
         "developer_notes": ""
     }
     response = api_client.post('/apps/api/app_builds/upload', data=data)
-    response.raise_for_status()
-    return response.status_code == client.CREATED
+    return response.status_code == HTTPStatus.CREATED
 
 
 def deploy_build(app_name: str, build_id: str, oauth_token: str):
@@ -367,8 +366,7 @@ def deploy_build(app_name: str, build_id: str, oauth_token: str):
         "build_id": build_id,
     }
     response = api_client.post('/apps/api/app_builds/deploy', data=data)
-    response.raise_for_status()
-    return response.status_code == client.ACCEPTED
+    return response.status_code == HTTPStatus.ACCEPTED
 
 
 def package_and_validate_bundle(oauth_token: str):
