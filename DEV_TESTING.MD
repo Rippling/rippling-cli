@@ -6,7 +6,11 @@ Run the following command:
 python ./rippling_cli/cli/main.py
 ```
 If the setup is complete, you should see the following output.
+<details>
+<summary>screenshot</summary>
+
 ![image](https://github.com/Rippling/rippling-cli/assets/88705494/32909c62-f0b4-429a-b288-1b0cbe82089e)
+</details>
 
 ### Run using pyinstaller
 - Install pyinstaller using the following command:
