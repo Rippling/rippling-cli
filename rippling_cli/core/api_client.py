@@ -1,4 +1,4 @@
-from http import client
+from http import HTTPStatus
 
 import requests  # type: ignore
 
@@ -17,8 +17,8 @@ class APIClient:
     def get(self, endpoint, params=None, stream=False):
         return self.make_request("GET", endpoint, params=params, stream=stream)
 
-    def post(self, endpoint, data=None, files=None):
-        return self.make_request("POST", endpoint, data=data, files=files)
+    def post(self, endpoint, json=None, data=None, files=None):
+        return self.make_request("POST", endpoint, json=json, data=data, files=files)
 
     def put(self, endpoint, data):
         return self.make_request("PUT", endpoint, data=data)
@@ -68,7 +68,7 @@ class APIClient:
                 payload.update(data)
             response = self.make_request("POST", f"{endpoint}/find_paginated", json=payload)
 
-            if response.status_code == client.OK:
+            if response.status_code == HTTPStatus.OK:
                 response_json = response.json()
                 cursor = response_json.get("cursor")
                 has_more = False if not cursor else True

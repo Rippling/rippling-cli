@@ -3,9 +3,15 @@ import click
 from rippling_cli.config.config import get_app_config, save_app_config
 from rippling_cli.constants import RIPPLING_BASE_URL
 from rippling_cli.utils.api_utils import get_data_by_id
-from rippling_cli.utils.app_utils import delete_app_install_for_app, display_apps, install_app_for_company
+from rippling_cli.utils.app_utils import (
+    delete_app_install_for_app,
+    display_apps,
+    get_app_install,
+    install_app_for_company,
+)
 from rippling_cli.utils.login_utils import ensure_logged_in
 from rippling_cli.utils.pagination_utils import paginate_data
+from rippling_cli.utils.server import set_forwarding_url, validate_forwarding_url_set
 
 
 @click.group()
@@ -25,6 +31,8 @@ def app(ctx: click.Context):
         - current: Display the currently selected app.
         - install: Install an app for a company.
         - uninstall: Uninstall an app for a company.
+        - connect: Set the forwarding URL for the app install
+            using the specified URL and timeout and validate the URL
     """
     ensure_logged_in(ctx)
 
@@ -156,3 +164,41 @@ def uninstall() -> None:
         return
 
     click.echo("Successfully uninstalled the app.")
+
+@app.command()
+@click.option("--forwarding_url", "-fu", required=True, type=str,
+              help="The URL to which the request should be forwarded.")
+@click.option( "--timeout", "-t",type=int, default=3600, help="Timeout for port forwarding (in seconds).")
+def connect(forwarding_url, timeout) -> None:
+    """
+    Set the forwarding URL for the app install using the specified URL and timeout and validate the URL
+    by checking if it is forwarding to the local server.
+    :param forwarding_url:
+    :param timeout:
+    :return:
+    """
+    ctx: click.Context = click.get_current_context()
+
+    app_install_json = get_app_install(ctx.obj.oauth_token)
+    if not app_install_json:
+        click.echo("No app install found for the current app. Please install the app using the 'install' command")
+        return
+
+    is_valid = validate_forwarding_url_set(forwarding_url)
+
+    if not is_valid:
+        click.echo("Url not forwarding to local server. Please check the URL and try again.")
+        return
+
+    # Set the forwarding URL with a timeout
+    forwarding_url_set, message = set_forwarding_url(app_install_json.get("id"), forwarding_url,
+                                                     timeout, ctx.obj.oauth_token)
+
+    if not forwarding_url_set:
+        message = "Failed to set the forwarding URL" if not message else message
+        click.echo(message)
+        return
+
+    click.echo("Successfully set the forwarding URL.")
+
+
