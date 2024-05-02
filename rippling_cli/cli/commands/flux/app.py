@@ -166,7 +166,7 @@ def uninstall() -> None:
     click.echo("Successfully uninstalled the app.")
 
 @app.command()
-@click.option("--forwarding_url", "-fu", required=True, type=str, help="The app id to set for the current directory.")
+@click.option("--forwarding_url", "-fu", required=True, type=str, help="The URL to which the request should be forwarded.")
 @click.option( "--timeout", "-t",type=int, default=3600, help="Timeout for port forwarding (in seconds).")
 def connect(forwarding_url, timeout) -> None:
     """
@@ -183,20 +183,19 @@ def connect(forwarding_url, timeout) -> None:
         click.echo("No app install found for the current app. Please install the app using the 'install' command")
         return
 
-    # Set the forwarding URL with a timeout
-    forwarding_url_set, message = set_forwarding_url(app_install_json.get("id"), forwarding_url,
-                                                     timeout, ctx.obj.oauth_token)
-
-    message = "Failed to set the forwarding URL" if not message else message
-
-    if not forwarding_url_set:
-        click.echo(message)
-        return
-
     is_valid = validate_forwarding_url_set(forwarding_url)
 
     if not is_valid:
         click.echo("Url not forwarding to local server. Please check the URL and try again.")
+        return
+
+    # Set the forwarding URL with a timeout
+    forwarding_url_set, message = set_forwarding_url(app_install_json.get("id"), forwarding_url,
+                                                     timeout, ctx.obj.oauth_token)
+
+    if not forwarding_url_set:
+        message = "Failed to set the forwarding URL" if not message else message
+        click.echo(message)
         return
 
     click.echo("Successfully set the forwarding URL.")
