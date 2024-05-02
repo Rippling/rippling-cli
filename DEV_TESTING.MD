@@ -25,7 +25,7 @@ pyinstaller rippling_cli/cli/main.py --name rippling --noconfirm
 ```
 ./dist/rippling/rippling [your command here]
 ```
-You can setup alias for the path of executable to run it from anywhere in the terminal.
+You can set up alias for the path of executable to run it from anywhere in the terminal.
 
 ### Run using homebrew 
 
