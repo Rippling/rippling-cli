@@ -166,7 +166,8 @@ def uninstall() -> None:
     click.echo("Successfully uninstalled the app.")
 
 @app.command()
-@click.option("--forwarding_url", "-fu", required=True, type=str, help="The URL to which the request should be forwarded.")
+@click.option("--forwarding_url", "-fu", required=True, type=str,
+              help="The URL to which the request should be forwarded.")
 @click.option( "--timeout", "-t",type=int, default=3600, help="Timeout for port forwarding (in seconds).")
 def connect(forwarding_url, timeout) -> None:
     """

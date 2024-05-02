@@ -24,7 +24,7 @@ def server(ctx: click.Context):
 @server.command()
 @click.option("-d","--debug", is_flag=True, help="Start Flask in debug mode.")
 @click.option("-p","--port", type=int, default=5000, help="Port number to run the server on.")
-def start(debug, port):
+def start(debug: bool, port: str):
     """
     Start the server and forward the port using ngrok for local development and set the forwarding URL.
     :param port:
