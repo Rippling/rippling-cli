@@ -17,4 +17,4 @@ source .venv/bin/activate
 python ./rippling_cli/cli/main.py 
 ```
 You should see this screenshot if your setup is complete
-![image]()
+![image](https://github.com/Rippling/rippling-cli/assets/88705494/32909c62-f0b4-429a-b288-1b0cbe82089e)
