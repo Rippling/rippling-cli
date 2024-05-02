@@ -2,6 +2,8 @@ import os
 import signal
 import subprocess
 
+from rippling_cli.utils.server import source_venv
+
 
 class FlaskServer:
     """
@@ -17,6 +19,7 @@ class FlaskServer:
         Start the Flask server.
         :return:
         """
+        source_venv()
         env = os.environ.copy()
         env["FLASK_APP"] = "flux_dev_tools.server.flask"
         flask_command = ["python", "-m", "flask", "run", "--port", str(self.port)]

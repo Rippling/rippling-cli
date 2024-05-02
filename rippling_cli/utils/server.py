@@ -1,7 +1,30 @@
+import os
+import subprocess
+import sys
 from http import HTTPStatus
 
 from rippling_cli.constants import RIPPLING_API
 from rippling_cli.core.api_client import APIClient
+
+
+def source_venv():
+    """
+    Source the virtual environment by modifying the PATH environment variable.
+    """
+    platform = sys.platform
+    if platform == "linux" or platform == "linux2":
+        venv_dir = os.path.join(os.getcwd(), ".venv/bin")
+    elif platform == "darwin":
+        venv_dir = os.path.join(os.getcwd(), ".venv/bin")
+    elif platform == "win32":
+        venv_dir = os.path.join(os.getcwd(), ".venv/Scripts")
+    else:
+        raise RuntimeError(f"Unsupported platform: {platform}")
+
+    venv_path = os.path.join(venv_dir)
+
+    # Modify the PATH environment variable
+    os.environ["PATH"] = venv_path + os.pathsep + os.environ.get("PATH", "")
 
 
 def set_forwarding_url(app_install_id, public_url, timeout, oauth_token):
