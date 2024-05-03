@@ -5,8 +5,12 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from rippling_cli.constants import APP_CONFIG_FILE, OAUTH_TOKEN_FILE_NAME, RIPPLING_DIRECTORY_NAME, \
-    DEFAULT_ACCESS_TOKEN_EXPIRATION
+from rippling_cli.constants import (
+    APP_CONFIG_FILE,
+    DEFAULT_ACCESS_TOKEN_EXPIRATION,
+    OAUTH_TOKEN_FILE_NAME,
+    RIPPLING_DIRECTORY_NAME,
+)
 
 CLIENT_ID = "AgvGDwoBRb0BJAnL2CQ8dNbE6J2fgCFIchEOyr5S"
 global_config_dir = Path.home() / RIPPLING_DIRECTORY_NAME
