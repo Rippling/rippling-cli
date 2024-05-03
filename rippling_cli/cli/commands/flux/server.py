@@ -10,8 +10,7 @@ from rippling_cli.utils.login_utils import ensure_logged_in
 @click.pass_context
 def server(ctx: click.Context):
     """
-    Manage the server and port forwarding for local development by starting the server and forwarding
-    the port using ngrok which sets the forwarding URL for the app install.
+    Manage the server for local development by starting the server and serving the app.
     """
     ensure_logged_in(ctx)
 
@@ -21,9 +20,8 @@ def server(ctx: click.Context):
 @click.option("-p","--port", type=int, default=5000, help="Port number to run the server on.")
 def start(debug: bool, port: str):
     """
-    Start the server and forward the port using ngrok for local development and set the forwarding URL.
+    Start the flask server for local development and testing.
     """
-
     ctx: click.Context = click.get_current_context()
     app_install_json = get_app_install(ctx.obj.oauth_token)
     if not app_install_json:
