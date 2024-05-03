@@ -21,6 +21,7 @@ def login(ctx) -> None:
         if ctx.obj.oauth_token:
             click.echo("Already logged in")
         else:
+            click.echo("Initiating login flow...")
             code_verifier, code_challenge = PKCE.generate_pkce_pair(DEFAULT_CODE_VERIFIER_LENGTH)
 
             token = OAuthToken(client_id, code_challenge, CODE_CHALLENGE_METHOD)

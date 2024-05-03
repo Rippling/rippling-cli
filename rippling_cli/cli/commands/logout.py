@@ -13,7 +13,7 @@ def logout(ctx) -> None:
     oauth_token = ctx.obj.oauth_token
 
     if not oauth_token:
-        click.echo("You are not logged in. Please log in first.")
+        click.echo("You are not logged in.")
         return
 
     logout_successful = logout_api(oauth_token)
