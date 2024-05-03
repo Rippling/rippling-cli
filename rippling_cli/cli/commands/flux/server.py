@@ -12,11 +12,6 @@ def server(ctx: click.Context):
     """
     Manage the server and port forwarding for local development by starting the server and forwarding
     the port using ngrok which sets the forwarding URL for the app install.
-
-    Commands:
-        - start: Start the server and forward the port using ngrok for local development and set the forwarding URL.
-    :param ctx:
-    :return:
     """
     ensure_logged_in(ctx)
 
@@ -27,9 +22,6 @@ def server(ctx: click.Context):
 def start(debug: bool, port: str):
     """
     Start the server and forward the port using ngrok for local development and set the forwarding URL.
-    :param port:
-    :param debug:
-    :return:
     """
 
     ctx: click.Context = click.get_current_context()

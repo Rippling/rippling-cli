@@ -5,6 +5,7 @@ import click
 
 from rippling_cli.cli.commands.flux.flux import flux
 from rippling_cli.cli.commands.login import login
+from rippling_cli.cli.commands.logout import logout
 from rippling_cli.config.config import get_client_id, get_oauth_token_data
 from rippling_cli.constants import EXIT_UNKNOWN_EXCEPTION
 from rippling_cli.core.oauth_token import OAuthToken
@@ -21,14 +22,6 @@ def cli(ctx):
     This is a command-line interface (CLI) tool for interacting with Rippling services. The Flux commands as part of
     the Rippling CLI allow both first-party and third-party App developers to create, manage and deploy
     Rippling-hosted integrations.
-
-    Available Commands:
-      login   Authenticate and authorize with Rippling services.
-      flux    Manage Rippling Flux apps and integrations.
-
-    Options:
-      -h, --help     Show this message and exit.
-      --version      Show the version and exit.
     """
 
     # Initialize the context object
@@ -44,6 +37,7 @@ def cli(ctx):
 
 COMMANDS_LIST: list[Union[click.Command, click.Group]] = [
     login,
+    logout,
     flux
 ]
 

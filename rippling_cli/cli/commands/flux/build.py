@@ -21,20 +21,12 @@ from rippling_cli.utils.pagination_utils import paginate_data
 @click.pass_context
 def build(ctx: click.Context):
     """
-    Manage flux builds.
+    Manage Flux builds, including initializing, listing, downloading, deleting, uploading, and deploying builds.
 
     This command group is the entry point for managing flux builds. It provides
     subcommands for various build-related operations, such as initializing a new
     project, listing all builds, downloading a specific build, deleting a build,
     uploading a new build, and deploying a build.
-
-    Commands:
-        - init: Initialize a new project by downloading and extracting the starter package.
-        - list: Display a list of all builds for the current app.
-        - download: Download a specific build for the current app.
-        - delete: Delete a specific build for the current app.
-        - upload: Upload a new build for the current app.
-        - deploy: Deploy a specific build for the current app.
     """
     ensure_logged_in(ctx)
 
@@ -119,10 +111,6 @@ def download(build_id: str):
     This command fetches and downloads a specific build identified by its
     build ID. The build is downloaded and saved in the current working
     directory.
-
-    Args:
-        build_id (str): The ID of the build to be downloaded.
-
     """
     ctx: click.Context = click.get_current_context()
     endpoint = f"/apps/api/app_builds/{build_id}"
@@ -143,10 +131,6 @@ def delete(build_id: str):
     Delete a specific build identified by its build ID.
 
     This command deletes a specific build identified by its build ID.
-
-    Args:
-        build_id (str): The ID of the build to be deleted.
-
     """
     ctx: click.Context = click.get_current_context()
     endpoint = f"/apps/api/app_builds/{build_id}"
@@ -204,10 +188,6 @@ def deploy(build_id: str):
 
     This command deploys a specific build identified by its build ID. It
     triggers the deployment process for the specified build.
-
-    Args:
-        build_id (str): The ID of the build to be deployed.
-
     """
     ctx: click.Context = click.get_current_context()
     # deploy the build

@@ -11,7 +11,7 @@ from rippling_cli.utils.login_utils import ensure_logged_in
 @click.pass_context
 def flux(ctx: click.Context):
     """
-    The flux command group.
+    Manage Rippling Flux apps and integrations.
 
     This command group is the entry point for the Flux CLI application. It
     serves as the base command group and provides access to various subcommands
@@ -22,14 +22,6 @@ def flux(ctx: click.Context):
     acts as a container for its subcommands. It is responsible for setting up
     the initial context and ensuring that the user is logged in before
     executing any subcommands.
-
-    Subcommands:
-        - app: Manage Flux apps, including listing, setting, and displaying
-               the current app.
-        - build: Manage Flux builds, including initializing, listing,
-                 downloading, deleting, uploading, and deploying builds.
-        - check: Validates the current app bundle by packaging and uploading
-                 it to an S3 bucket.
 
     """
     ensure_logged_in(ctx)

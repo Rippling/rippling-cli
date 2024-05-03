@@ -11,7 +11,10 @@ from rippling_cli.core.oauth_token import OAuthToken
 @click.pass_context
 def login(ctx) -> None:
     """
-    Log in to the application using OAuth
+    Authenticate and authorize with Rippling services.
+
+    This command logs in to the Rippling by starting the OAuth authorization flow, getting the authorization code
+    and exchanging it for an access token.
     """
     client_id = ctx.obj.oauth_credentials
     if client_id:

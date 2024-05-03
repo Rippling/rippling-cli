@@ -5,7 +5,8 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from rippling_cli.constants import APP_CONFIG_FILE, OAUTH_TOKEN_FILE_NAME, RIPPLING_DIRECTORY_NAME
+from rippling_cli.constants import APP_CONFIG_FILE, OAUTH_TOKEN_FILE_NAME, RIPPLING_DIRECTORY_NAME, \
+    DEFAULT_ACCESS_TOKEN_EXPIRATION
 
 CLIENT_ID = "AgvGDwoBRb0BJAnL2CQ8dNbE6J2fgCFIchEOyr5S"
 global_config_dir = Path.home() / RIPPLING_DIRECTORY_NAME
@@ -36,11 +37,21 @@ def save_oauth_token(token, expires_in=3600):
 
     data = {
         "token": str(token),
-        "expiration_timestamp": (datetime.now() + timedelta(seconds=expires_in)).timestamp()
+        "expiration_timestamp": (datetime.now() + timedelta(seconds=min(expires_in,
+                                                                        DEFAULT_ACCESS_TOKEN_EXPIRATION))).timestamp()
     }
     token_file = global_config_dir / OAUTH_TOKEN_FILE_NAME
     with token_file.open("w") as f:
         json.dump(data, f)
+
+
+def remove_oauth_token():
+    token_file = Path(global_config_dir) / OAUTH_TOKEN_FILE_NAME
+    if token_file.exists():
+        try:
+            os.remove(token_file)
+        except OSError:
+            pass
 
 
 def get_app_config_dir(start_dir):

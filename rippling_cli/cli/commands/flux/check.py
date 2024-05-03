@@ -9,15 +9,13 @@ from rippling_cli.utils.login_utils import ensure_logged_in
 @click.pass_context
 def check(ctx: click.Context):
     """
-    Check the bundle for the current app.
+    Validates the current app bundle by packaging and uploading it to an S3 bucket
 
     This command creates a zip file of the current app, including all Poetry
     dependencies from the poetry.lock file. It then uploads the zip file to
     a specified s3 bucket, validates the bundle and prints the error
     or success message.
 
-    Args:
-        ctx (click.Context): The context object that holds state across the
     """
     ensure_logged_in(ctx)
     app_config = get_app_config()

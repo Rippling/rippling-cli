@@ -18,21 +18,13 @@ from rippling_cli.utils.server import set_forwarding_url, validate_forwarding_ur
 @click.pass_context
 def app(ctx: click.Context):
     """
-    Manage flux apps.
+    Manage Flux apps, including listing, setting, and displaying the current app.
 
     This command group is the entry point for managing flux apps. It provides
     subcommands for various app-related operations, such as listing all apps,
     setting the current app for the directory, and displaying the currently
     selected app.
 
-    Commands:
-        - list: Display a list of all apps owned by the developer.
-        - set: Set the current app within the directory.
-        - current: Display the currently selected app.
-        - install: Install an app for a company.
-        - uninstall: Uninstall an app for a company.
-        - connect: Set the forwarding URL for the app install
-            using the specified URL and timeout and validate the URL
     """
     ensure_logged_in(ctx)
 
@@ -57,15 +49,9 @@ def list(search_query: str) -> None:
 @click.option("--app_id", required=True, type=str, help="The app id to set for the current directory.")
 def set(app_id: str):
     """
-    Set the current app within the app_config.json file.
+    Set the current app context within the directory.
 
-    This command sets the current app within the app_config.json file located
-    in the .rippling directory. It saves the app ID, display name, and app name
-    in the config file.
-
-    Args:
-        app_id (str): The ID of the app to set as the current app.
-
+    This command sets the current app context within the directory.
     """
     ctx: click.Context = click.get_current_context()
     endpoint = f"/apps/api/apps/{app_id}"
@@ -88,8 +74,8 @@ def current():
     Display the currently selected app.
 
     This command indicates the current app selected by the developer within
-    the directory. It reads the app_config.json file and displays the display
-    name and ID of the currently selected app.
+    the directory. It displays the display name and ID of the currently
+    selected app.
 
     """
     app_config = get_app_config()
@@ -104,8 +90,6 @@ def current():
 def install() -> None:
     """
     Install the current app by opening the url on the browser.
-    :param ctx:
-    :return:
     """
     ctx: click.Context = click.get_current_context()
     app_config = get_app_config()
@@ -135,8 +119,6 @@ def install() -> None:
 def uninstall() -> None:
     """
     Uninstall the current app by calling the uninstall endpoint.
-    :param ctx:
-    :return:
     """
     ctx: click.Context = click.get_current_context()
     app_config = get_app_config()
@@ -165,17 +147,15 @@ def uninstall() -> None:
 
     click.echo("Successfully uninstalled the app.")
 
+
 @app.command()
 @click.option("--forwarding_url", "-fu", required=True, type=str,
               help="The URL to which the request should be forwarded.")
-@click.option( "--timeout", "-t",type=int, default=3600, help="Timeout for port forwarding (in seconds).")
+@click.option("--timeout", "-t", type=int, default=3600, help="Timeout for port forwarding (in seconds).")
 def connect(forwarding_url, timeout) -> None:
     """
     Set the forwarding URL for the app install using the specified URL and timeout and validate the URL
     by checking if it is forwarding to the local server.
-    :param forwarding_url:
-    :param timeout:
-    :return:
     """
     ctx: click.Context = click.get_current_context()
 
@@ -200,5 +180,3 @@ def connect(forwarding_url, timeout) -> None:
         return
 
     click.echo("Successfully set the forwarding URL.")
-
-

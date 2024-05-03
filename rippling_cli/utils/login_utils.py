@@ -3,6 +3,7 @@ from http import HTTPStatus
 import click
 
 from rippling_cli.cli.commands.login import login
+from rippling_cli.cli.commands.logout import logout
 from rippling_cli.constants import RIPPLING_API
 from rippling_cli.core.api_client import APIClient
 from rippling_cli.core.oauth_token import OAuthToken
@@ -10,7 +11,7 @@ from rippling_cli.core.oauth_token import OAuthToken
 
 def ensure_logged_in(ctx: click.Context):
     if OAuthToken.is_token_expired():
-        click.echo("You are not logged in. Please log in first.")
+        ctx.invoke(logout)
         ctx.invoke(login)
 
 
