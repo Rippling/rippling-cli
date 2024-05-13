@@ -55,6 +55,7 @@ if __name__ == "__main__":
         initialize_cli()
         cli()
     except Exception:
+        pass
         exit_code = EXIT_UNKNOWN_EXCEPTION
     finally:
         sys.exit(exit_code)
