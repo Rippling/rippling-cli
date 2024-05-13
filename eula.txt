@@ -1,0 +1,53 @@
+End User License Agreement
+
+IMPORTANT: PLEASE READ BEFORE INSTALLATION OR USE OF THE SOFTWARE PROVIDED WITH THIS END USER LICENSE AGREEMENT (AND RELATED DOCUMENTATION) (COLLECTIVELY, “PRODUCT(S)”).
+
+BY INSTALLING OR IN ANY WAY USING THE PRODUCT, THE ENTITY OR COMPANY THAT YOU REPRESENT ("LICENSEE") IS UNCONDITIONALLY CONSENTING TO BE BOUND BY AND IS BECOMING A PARTY TO THIS END USER LICENSE AGREEMENT
+AND LIMITED WARRANTY ("AGREEMENT") WITH PEOPLE CENTER, INC. (“RIPPLING”).  IF LICENSEE DOES NOT UNCONDITIONALLY AGREE TO ALL OF THE TERMS OF THIS AGREEMENT, THEN INSTALLATION OR USE OF THIS PRODUCT IS STRICTLY
+PROHIBITED. IF THESE TERMS ARE CONSIDERED AN OFFER, ACCEPTANCE IS EXPRESSLY LIMITED TO THESE TERMS.
+
+1. GRANT; PROPRIETARY RIGHTS. Subject to the terms of this Agreement, Rippling hereby grants Licensee (and only Licensee) a limited, personal, non-sublicensable, non-transferable, royalty-free, nonexclusive license to
+use the Product only for Licensee’s organization’s legitimate and lawful business purposes and only in accordance with the related documentation.  As between the parties, title, ownership rights, and intellectual property
+rights in and to the Product, and any copies or portions thereof, shall remain in Rippling. Licensee understands that Rippling may modify or discontinue offering the Product at any time. The Product is protected by the
+copyright laws of the United States and international copyright treaties, and this Agreement does not grant Licensee any rights not expressly granted herein.  Further, Licensee acknowledges that the Product, its features
+and functionality, and all related information and documentation are confidential to Rippling and its suppliers (“Confidential Information”), and Licensee agrees at all times to protect and preserve in strict confidence
+all such Confidential Information and use it only as expressly permitted herein.  Licensee agrees not to permit or authorize access to, or disclosure of any such Confidential Information to any person other than employees
+of Licensee who are bound in writing to terms no less restrictive than this Agreement and have a need to access the Product and documentation for the benefit of the Licensee.
+
+2. RESTRICTIONS.  Except as expressly and unambiguously permitted by this Agreement, Licensee shall not, nor permit anyone else to, directly or indirectly: (i) reverse engineer, disassemble, decompile or otherwise attempt to
+discover the source code or structure, sequence and organization of the Product (except where the foregoing is expressly prohibited by applicable local law, and then only to the extent so prohibited); (ii) use the Product for
+performing comparisons or other "benchmarking" activities, either alone or in connection with any software (and Licensee will not publish or disclose any such performance information or comparisons); (iii) use any Product
+add-ons or additional features unless Licensee has a valid subscription and has timely paid all applicable fees, or (iv) otherwise use any Product for any purpose not expressly and unambiguously authorized herein (including,
+without limitation, for any purpose competitive with Rippling).  However, the foregoing is not intended to limit the terms of any applicable open source license that may apply to any portion or component of the Product (as
+described in the Product code or relevant documentation). Licensee shall maintain and not remove or obscure any proprietary notices on the Product.
+
+3. SUPPORT AND UPGRADES. This Agreement does not entitle Licensee to any support, upgrades, patches, enhancements, or fixes for the Product (collectively, "Support").  Any such Support for the Product that may be made available
+by Rippling shall become part of the Product and subject to this Agreement.
+
+4. FEES. Licensee shall pay Rippling the fees for the Product, if any, designated by Rippling (or its applicable partner). All fees shall be non-refundable and payable in US dollars on the date they come due.  Licensee shall
+also pay all sales, use, value-added and other taxes, tariffs and duties of any type assessed against Rippling except for U.S. taxes on Rippling’s income.
+
+5. WARRANTY DISCLAIMER. RIPPLING PROVIDES THE PRODUCTS "AS IS" AND WITHOUT WARRANTY OF ANY KIND, AND HEREBY DISCLAIMS ALL EXPRESS OR IMPLIED WARRANTIES, INCLUDING WITHOUT LIMITATION WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE, PERFORMANCE, RELIABILITY, AND NON-INFRINGEMENT.  THIS DISCLAIMER OF WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS AGREEMENT.
+
+6. LIMITATION OF LIABILITY.  UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, INCLUDING, BUT NOT LIMITED TO, TORT, CONTRACT, NEGLIGENCE, STRICT LIABILITY, OR OTHERWISE, SHALL LICENSOR OR ITS SUPPLIERS OR RESELLERS BE LIABLE
+TO LICENSEE OR ANY OTHER PERSON FOR (A) ANY INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOST PROFITS, LOSS OF GOODWILL, WORK STOPPAGE, ACCURACY OF RESULTS,
+COMPUTER FAILURE OR MALFUNCTION, OR LOSS OR CORRUPTION OF DATA, OR (B) ANY AMOUNT IN THE AGGREGATE IN EXCESS OF THE FEES PAID BY LICENSEE FOR THE APPLICABLE PRODUCT IN THE TWELVE (12) MONTHS PRECEDING THE DATE THE CLAIM AROSE,
+OR, IF GREATER, ONE HUNDRED DOLLARS ($100). THE FOREGOING LIMITATIONS SHALL APPLY EVEN IF LICENSOR SHALL HAVE BEEN INFORMED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+7. TERMINATION. Licensee agrees that Rippling, in its sole discretion, may suspend or terminate Licensee’s use of the Product, immediately and for any reason, including, without limitation, if Rippling believes that Licensee
+has violated or acted inconsistently with the letter or spirit of this Agreement.  Upon receiving notice of termination from Rippling, Licensee will destroy or remove from all computers, networks, and storage media all copies
+of the Product.  Sections 2 and 4 through 10 shall survive termination of this Agreement.
+
+8. GOVERNMENT USE. If Licensee is part of an agency, department, or other entity of the United States Government (“Government”), the use, duplication, reproduction, release, modification, disclosure or transfer of the Product
+is restricted in accordance with the Federal Acquisition Regulations as applied to civilian agencies and the Defense Federal Acquisition Regulation Supplement as applied to military agencies. The Product is “commercial item,”
+“commercial computer software” and “commercial computer software documentation.” In accordance with such provisions, any use of the Product by the Government shall be governed solely by the terms of this Agreement.
+
+9. EXPORT CONTROLS.  Licensee shall comply with all export laws and restrictions and regulations of the Department of Commerce, the United States Department of Treasury Office of Foreign Assets Control (“OFAC”), or other United
+States or foreign agency or authority, and will not export, or allow the export or re-export of, the Product in violation of any such restrictions, laws or regulations.  By downloading or using the Product, Licensee is agreeing
+to the foregoing and Licensee is representing and warranting that Licensee is not located in, under the control of, or a national or resident of any restricted country or on any such list.
+
+10. MISCELLANEOUS.  This Agreement is personal to Licensee and Licensee shall not assign or transfer this Agreement or the Product to any third party under any circumstances.  This Agreement represents the complete agreement
+concerning this license between the parties and supersedes all prior agreements and representations between them.  It may be amended only by a writing executed by both parties.  If any provision of this Agreement is held to be
+unenforceable for any reason, such provision shall be reformed only to the extent necessary to make it enforceable.  This Agreement will be governed by the laws of the State of Delaware, exclusive of its rules governing choice
+of law and conflict of laws.
