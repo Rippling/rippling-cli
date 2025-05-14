@@ -1,5 +1,5 @@
-version: 2025-04-22-16-08-45
+version: 2025-05-14-16-42-26
 services:
-  - name: service-name
-    team: team-name
-    jira_project_key: KEY
+  - name: rippling-cli
+    team: rql-history
+    jira_project_key: HUB
