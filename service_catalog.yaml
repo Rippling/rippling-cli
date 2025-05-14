@@ -1,0 +1,5 @@
+version: 2025-05-14-16-42-26
+services:
+  - name: rippling-cli
+    team: rql-history
+    jira_project_key: HUB
