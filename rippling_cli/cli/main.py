@@ -4,8 +4,10 @@ from typing import Union
 import click
 
 from rippling_cli.cli.commands.flux.flux import flux
+from rippling_cli.cli.commands.hr.hr import hr
 from rippling_cli.cli.commands.login import login
 from rippling_cli.cli.commands.logout import logout
+from rippling_cli.cli.commands.reports.reports import reports
 from rippling_cli.config.config import get_client_id, get_oauth_token_data
 from rippling_cli.constants import EXIT_UNKNOWN_EXCEPTION
 from rippling_cli.core.oauth_token import OAuthToken
@@ -38,7 +40,9 @@ def cli(ctx):
 COMMANDS_LIST: list[Union[click.Command, click.Group]] = [
     login,
     logout,
-    flux
+    flux,
+    hr,
+    reports,
 ]
 
 
@@ -49,10 +53,12 @@ def initialize_cli() -> None:
         cli.add_command(command)
 
 
+initialize_cli()
+
+
 if __name__ == "__main__":
     exit_code = 0
     try:
-        initialize_cli()
         cli()
     except Exception:
         exit_code = EXIT_UNKNOWN_EXCEPTION
